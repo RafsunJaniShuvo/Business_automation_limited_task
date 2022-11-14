@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container mt-5">
-      <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 82%;">
+      <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 82%;">
         <i class="fa-solid fa-plus"></i>Add info
       </button>
       
@@ -114,6 +114,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary save">Save</button>
+            <button type="button" class="btn btn-primary update">Update</button>
           </div>
         </div>
       </div>
@@ -181,38 +182,18 @@
         {"data":"description"},
         {"data":"actions",
           },
-      ],
-      // "columnDefs" : [
-      //   { targets : [3,5],
-      //     // render:function(data,type,row){
-      //     //   return data =='0'?'Female':'Male';
-      //     // },
-      //     render : function (data, type, row) {
-      //       //  return data == '0' ? 'free' : 'paid';
-      //       let   quali='';
-      //       switch(data){
-      //         case '0':
-      //             quali = 'B.Sc';
-      //           break;
-      //         case '1':
-      //           quali = 'H.Sc';
-      //           break;
-      //         case '2':
-      //           quali = 'S.Sc';
-      //           break;
-      //       }
-      //       return quali;
-      //     },
-      //     render:function(data,type,row){
-      //       return data == '0'? 'inactive':'active';
-      //     }
-         
-      //   }
-      // ]
-      
+      ]
+     
 
      });
 
+     //hide update button normally
+     $(document).ready(function(){
+        $('.addinfo').click(function(){
+          $('.update').hide();
+        })
+     })
+   
      ///Save
 
      $(document).ready(function(){
@@ -264,10 +245,18 @@
         dataType:"json",
         url: '/edit-data/' + product_id,
         success:function(response){
-          console.log(response)
+          // console.log(response)
           $('#user_name').val(response.user_name);
           $('#email').val(response.email);
           $('#desc').val(response.description);
+          $('#qualification').val(response.qualification);
+          // $('#status').val(response.status);
+          $('#birthday').val(response.birthday);
+          $("#gender[value='" + response.gender + "']").prop('checked', true); //most important and challenging
+          $("#status[value='" + response.status + "']").prop('checked', true); //most important and challenging
+          // console.log(response.status)
+          $('.save').hide();
+          $('.update').show();
         },error:function(respnse){
           alert('not ok');
         }
