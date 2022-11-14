@@ -56,6 +56,22 @@ class homeController extends Controller
      //store info
      public function store_info(Request $request)
      {
+        $request->validate([
+            'user_name'=>'required',
+            'email'=>'required|email|unique:information',
+            'gender'=>'required',
+            'qualification'=>'required',
+            'birthday'=>'required',
+            'status'=>'required',
+            'description'=>'required',
+           
+        ]
+    ,[
+        'user_name.required ' =>'User name is required',
+        'email.required'=>'Email is required',
+        'gender.required'=>'Gender is required',
+        'qualification.required'=>'Qualification is required',
+    ]);
         // print_r($request->toArray());
         // return response()->json($request->toArray());
         $info = new Information();

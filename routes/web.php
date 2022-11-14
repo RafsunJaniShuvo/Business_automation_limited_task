@@ -2,6 +2,7 @@
 use App\Http\Middleware\CustomAuth;
 
 use App\Http\Controllers\Auth\CustomAuthController;
+use App\Http\Controllers\fileController;
 use App\Http\Controllers\homeController;
 use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,13 @@ Route::get('/get-data',[homeController::class,'getData'])->name('ajax.getData');
 Route::post('/store-data',[homeController::class,'store_info'])->name('store_info');
 Route::get('/edit-data/{id}',[homeController::class,'edit_info'])->name('edit_info');
 Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
+
+//file
+
+Route::get('/file',[fileController::class,'create'])->name('create.file');
+// Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
+Route::post('/store-multi-file-ajax', [fileController::class, 'storeMultiFile']);
+
 
 
     
