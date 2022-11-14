@@ -148,8 +148,9 @@
         {"data":"email"},
         {"data":null,
           render:function(data,type,row)
-          {
-            return data =='0'?'Female':'Male';
+          { 
+            // console.log(data)
+            return data.gender =='0'?'Female':'Male';
           }
         },
         {"data":null,
@@ -174,7 +175,7 @@
         {"data":"birthday"},
         {"data":null,
             render:function(data){
-             return data =='0' ? 'Inactive' : 'Active';
+             return data.status =='0' ? 'Inactive' : 'Active';
             }
          },
         {"data":"description"},
@@ -226,7 +227,7 @@
           if(gender.length>0){
             gender=gender.val();
           }
-
+          console.log(user_name,email,qualification,birthday,status,desc,gender)
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -235,6 +236,9 @@
             success:function(response){
               if(response.status=='success'){
                 alert("Information saved successfully");
+                $('#exampleModal').hide();
+                location.reload();
+
 
               }
             },

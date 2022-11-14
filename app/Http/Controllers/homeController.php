@@ -56,22 +56,22 @@ class homeController extends Controller
      //store info
      public function store_info(Request $request)
      {
-        $request->validate([
-            'user_name'=>'required',
-            'email'=>'required|email|unique:information',
-            'gender'=>'required',
-            'qualification'=>'required',
-            'birthday'=>'required',
-            'status'=>'required',
-            'description'=>'required',
+    //     $request->validate([
+    //         'user_name'=>'required',
+    //         'email'=>'required|email|unique:information',
+    //         'gender'=>'required',
+    //         'qualification'=>'required',
+    //         'birthday'=>'required',
+    //         'status'=>'required',
+    //         'description'=>'required',
            
-        ]
-    ,[
-        'user_name.required ' =>'User name is required',
-        'email.required'=>'Email is required',
-        'gender.required'=>'Gender is required',
-        'qualification.required'=>'Qualification is required',
-    ]);
+    //     ]
+    // ,[
+    //     'user_name.required ' =>'User name is required',
+    //     'email.required'=>'Email is required',
+    //     'gender.required'=>'Gender is required',
+    //     'qualification.required'=>'Qualification is required',
+    // ]);
         // print_r($request->toArray());
         // return response()->json($request->toArray());
         $info = new Information();
@@ -81,7 +81,7 @@ class homeController extends Controller
         $info->qualification=$request->qualification;
         $info->birthday=$request->birthday;
         $info->status= $request->status;
-        $info->description=$request->description;
+        $info->description=$request->desc;
         $info->save();
         return response()->json([
             'status'=>'success'
