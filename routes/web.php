@@ -37,6 +37,7 @@ Route::get('/home',[homeController::class,'manage'])->name('home.manage');
 Route::get('/get-data',[homeController::class,'getData'])->name('ajax.getData');
 Route::post('/store-data',[homeController::class,'store_info'])->name('store_info');
 Route::get('/edit-data/{id}',[homeController::class,'edit_info'])->name('edit_info');
+Route::post('/update-data/{id}',[homeController::class,'update_info'])->name('update_info');
 Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
 
 //file

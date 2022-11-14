@@ -22,7 +22,7 @@
             <table class="table" id="myTable">
               <thead>
                 <tr>
-                  {{-- <th scope="col">Sl_No.</th> --}}
+                  <th scope="col">Sl_No.</th>
                   <th scope="col">User Name</th>
                   <th scope="col">Email</th>
                   <th scope="col">Gender</th>
@@ -52,6 +52,7 @@
           <div class="modal-body">
             <form action="" id="modal_form">
 
+              <input type="number" id="id" >
             <div class="row">
               <div class="col-md-4">
                 <div class="mb-3">
@@ -145,6 +146,7 @@
       "serverSide":true,
       "ajax":"{{route('ajax.getData')}}",
       "columns":[
+        {"data":"id"},
         {"data":"user_name"},
         {"data":"email"},
         {"data":null,
@@ -245,7 +247,7 @@
         dataType:"json",
         url: '/edit-data/' + product_id,
         success:function(response){
-          // console.log(response)
+          $('#id').val(response.id);
           $('#user_name').val(response.user_name);
           $('#email').val(response.email);
           $('#desc').val(response.description);
@@ -263,6 +265,41 @@
       })
      })
 
+     //update information
+     $(document).on('click','.update',function(){
+          let id = $('#id').val();
+      
+          let user_name=$('#user_name').val();
+          let email= $('#email').val();
+          let qualification= $('#qualification').val();
+          let birthday=$('#birthday').val() ;
+          let status=$('#status').val() ;
+          let desc=$('#desc').val() ;
+          let gender=$("input[type='radio'][name='gender']:checked");//get radio button value
+          if(gender.length>0){                                      //get radio button value
+            gender=gender.val();                                    //get radio button value
+          }                                                         //get radio button value
+          console.log(id,user_name,email,qualification,birthday,status,desc,gender);
+          $.ajax({
+            type:"POST",
+            dataType:"json",
+            url:'/update-data/'+id,
+            data:{user_name:user_name,email:email,qualification:qualification,birthday:birthday,status:status,desc:desc,gender:gender},
+            success:function(response){
+              if(response.status=='success'){
+                alert("Information updated successfully");
+                $('#exampleModal').hide();
+                location.reload();
+
+
+              }
+            },
+            error:function(response){
+              alert("Failed to update data");
+            }
+          })
+
+     })
 
 
      //Delete button

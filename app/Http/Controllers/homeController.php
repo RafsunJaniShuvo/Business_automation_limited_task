@@ -94,6 +94,22 @@ class homeController extends Controller
             return response()->json($info);
         }
 
+        public function update_info(Request $request,$id)
+        {
+            $info = Information::find($id);
+            $info->user_name=$request->user_name;
+            $info->email=$request->email;
+            $info->gender=$request->gender;
+            $info->qualification=$request->qualification;
+            $info->birthday=$request->birthday;
+            $info->status= $request->status;
+            $info->description=$request->desc;
+            $info->update();
+            return response()->json([
+                'status'=>'success'
+            ]);
+        }
+
         public function delete_info($id)
         {
             $info = Information::find($id);
