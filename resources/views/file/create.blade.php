@@ -67,10 +67,12 @@
                     contentType: false,
                     processData: false,
                     success: function (images) {
-                        console.log(`ok ${images}`)
+                        // console.log(`ok ${images}`)
+                        alert('File saved successfully');
                     },
                     error: function () {
-                    console.log(`Failed`)
+                    // console.log(`Failed`)
+                    alert('Failed to save');
                     }
                 })
               

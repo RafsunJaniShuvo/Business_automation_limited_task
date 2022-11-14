@@ -12,22 +12,25 @@ class fileController extends Controller
         return view('file.create');
     }
     public function storeMultiFile(Request $request)
-    {
-         
+    { 
+        // dd($request->all());
+       
         if ($request->hasFile('images')) {
             $images = $request->file('images');
-          
-
-            // $images = $request->images;
+            // dd($images);
             foreach ($images as $image) {
-            //     $imagesName = $images->getClientOriginalName();
-                    $imagesName = $image->getClientOriginalName();
-            //     dd($imagesName);    
-                $randonName = rand(1, 200);
-                $image->move(public_path('/images/test'),$randonName . $imagesName . $randonName . '.jpg');
-
-            }
+                $file = new File();
+                $imagesName = $image->getClientOriginalName();
+                $ans= $image->move(public_path('/images/test'), $imagesName);
+                $file->images = $ans;
+                $file->save();
+                
+            }   
          }
+         
+         return response()->json([
+            'status'=>'success'
+         ]);
         
     }
 }
