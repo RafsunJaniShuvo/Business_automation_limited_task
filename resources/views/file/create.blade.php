@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <title>File</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
@@ -17,7 +18,7 @@
             <div class="col-md-6">
 
             <div class="card-header">
-                <h1 align="center">File </h1>
+                <h1 align ="center">File </h1>
             </div>
             <div class="card">
                 <form action="#" method="POST" id="multi-file-upload-ajax" enctype="multipart/form-data" id="formSubmit">
@@ -25,11 +26,11 @@
                     @csrf
                         <div class="card">
                             <div class="mb-3">
-                                <input type="file" name="files[]" id="files" placeholder="Choose files" multiple >
+                                <input type="file" id="image-upload" name="image_upload[]" enctype="multipart/form-data" multiple>
                             </div>
                         </div>
                         <div class="">
-                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                            <button type="button" class="btn btn-primary" id="submit">Submit</button>
                         </div> 
                 </form>
             </div>
@@ -43,42 +44,38 @@
 
         $(document).ready(function(e){
 
-
             $.ajaxSetup({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
-        });
-
-
-        $('#multi-file-upload-ajax').submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            let TotalFiles = $('#files')[0].files.length; //Total files
-            let files = $('#files')[0];
-            for (let i = 0; i < TotalFiles; i++) {
-            formData.append('files' + i, files.files[i]);
-            }
-            formData.append('TotalFiles', TotalFiles);
-            console.log(formData)
-
-            $.ajax({
-            type:'POST',
-            rl: "{{ url('store-multi-file-uajax')}}",
-            data: formData,
-            cache:false,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            success: (data) => {
-            this.reset();
-            alert('Files has been uploaded using jQuery ajax');
-            },
-            error: function(data){
-            alert(data.responseJSON.errors.files[0]);
-            console.log(data.responseJSON.errors);
-            }
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             });
 
-        })
+            $('#image-upload').change(function () {
+                event.preventDefault();
+                let image_upload = new FormData();
+                // console.log(image_upload)
+                let TotalImages = $('#image-upload')[0].files.length;  //Total Images
+                let images = $('#image-upload')[0]; 
+                for (let i = 0; i < TotalImages; i++) {
+                    image_upload.append('images[]', images.files[i]);
+                }
+                image_upload.append('TotalImages', TotalImages);
+                // console.log(image_upload)
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/image-upload',
+                    data: image_upload,
+                    contentType: false,
+                    processData: false,
+                    success: function (images) {
+                        console.log(`ok ${images}`)
+                    },
+                    error: function () {
+                    console.log(`Failed`)
+                    }
+                })
+              
+            })
+       
     })
     </script>
   </body>

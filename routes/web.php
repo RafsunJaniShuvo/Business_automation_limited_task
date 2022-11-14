@@ -44,7 +44,7 @@ Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('del
 
 Route::get('/file',[fileController::class,'create'])->name('create.file');
 // Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
-Route::post('/store-multi-file-ajax', [fileController::class, 'storeMultiFile']);
+Route::post('/image-upload', [fileController::class, 'storeMultiFile']);
 
 
 

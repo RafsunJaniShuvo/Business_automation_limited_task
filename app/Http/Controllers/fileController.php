@@ -14,39 +14,20 @@ class fileController extends Controller
     public function storeMultiFile(Request $request)
     {
          
-    //    $validatedData = $request->validate([
-    //     'files' => 'required',
-    //     'files.*' => 'mimes:csv,txt,xlx,xls,pdf'
-    //     ]);
- 
-        if($request->TotalFiles > 0)
-        {
-                
-           for ($x = 0; $x < $request->TotalFiles; $x++) 
-           {
- 
-               if ($request->hasFile('files'.$x)) 
-                {
-                    $file      = $request->file('files'.$x);
- 
-                    $path = $file->store('public/files');
-                    $name = $file->getClientOriginalName();
- 
-                    $insert[$x]['images'] = $name;
-                    // $insert[$x]['path'] = $path;
-                }
-           }
- 
-            File::insert($insert);
- 
-            return response()->json(['success'=>'Ajax Multiple fIle has been uploaded']);
- 
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
           
-        }
-        else
-        {
-           return response()->json(["message" => "Please try again."]);
-        }
- 
+
+            // $images = $request->images;
+            foreach ($images as $image) {
+            //     $imagesName = $images->getClientOriginalName();
+                    $imagesName = $image->getClientOriginalName();
+            //     dd($imagesName);    
+                $randonName = rand(1, 200);
+                $image->move(public_path('/images/test'),$randonName . $imagesName . $randonName . '.jpg');
+
+            }
+         }
+        
     }
 }
