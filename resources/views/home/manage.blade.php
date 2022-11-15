@@ -8,7 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <style>
+       textarea.error{ border: 1px solid #FF0000 !important;}
+    </style>
   </head>
   <body>
     <div class="container mt-5">
@@ -49,10 +51,11 @@
             <h5 class="modal-title" id="exampleModalLabel">Information</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <div class="alert alert-danger" style="display:none"></div>
           <div class="modal-body">
             <form action="" id="modal_form">
 
-              <input type="number" id="id" >
+            <input type="number" id="id" hidden>
             <div class="row">
               <div class="col-md-4">
                 <div class="mb-3">
@@ -63,15 +66,15 @@
               <div class="col-md-4">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email address</label>
-                  <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com">
+                  <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="mb-3">
                   <span>Gender</span><br>
-                    <input type="radio" id="gender" name="gender"  value="1">
+                    <input type="radio" id="gender" name="gender"  value="1" >
                     <label for="gender">Male</label><br>
-                    <input type="radio" id="gender" name="gender" value="0">
+                    <input type="radio" id="gender" name="gender" value="0" >
                     <label for="gender">Female</label><br>
                 </div>
               </div>
@@ -80,7 +83,7 @@
               <div class="col-md-4">
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
-                  <select class="form-select" aria-label="Default select example" id="qualification">
+                  <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" required>
                     <option selected>Open this select menu</option>
                     <option value="0">B.Sc</option>
                     <option value="1">H.Sc</option>
@@ -92,7 +95,7 @@
               <div class="col-md-4">
                 <div class="mb-3">
                   <label for="birthday" class="form-label">Birthday</label>
-                  <input type="date" class="form-control" id="birthday" placeholder="Birthday">
+                  <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" required>
                 </div>
               </div>
               <div class="col-md-4">
@@ -152,7 +155,7 @@
         {"data":null,
           render:function(data,type,row)
           { 
-            // console.log(data)
+           
             return data.gender =='0'?'Female':'Male';
           }
         },
@@ -210,7 +213,7 @@
           if(gender.length>0){
             gender=gender.val();
           }
-          console.log(user_name,email,qualification,birthday,status,desc,gender)
+          // console.log(user_name,email,qualification,birthday,status,desc,gender)
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -226,6 +229,7 @@
               }
             },
             error:function(response){
+              jQuery('.alert-danger').show();
               alert("Failed to insert data");
             }
           })
@@ -252,11 +256,9 @@
           $('#email').val(response.email);
           $('#desc').val(response.description);
           $('#qualification').val(response.qualification);
-          // $('#status').val(response.status);
           $('#birthday').val(response.birthday);
           $("#gender[value='" + response.gender + "']").prop('checked', true); //most important and challenging
           $("#status[value='" + response.status + "']").prop('checked', true); //most important and challenging
-          // console.log(response.status)
           $('.save').hide();
           $('.update').show();
         },error:function(respnse){
@@ -279,7 +281,7 @@
           if(gender.length>0){                                      //get radio button value
             gender=gender.val();                                    //get radio button value
           }                                                         //get radio button value
-          console.log(id,user_name,email,qualification,birthday,status,desc,gender);
+          // console.log(id,user_name,email,qualification,birthday,status,desc,gender);
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -342,21 +344,77 @@
         $("#modal_form").validate({
         
             rules: {
-                name: {
+              name: {
+                      required: true,
+                      minlength: 3,
+                  },
+
+                  email:{
+                    required:true,
+
+                  },
+                  gender:{
+                    required:true
+                  },
+
+                  qualification:{
+                    required:true,
+                  },
+
+                  birthday:{
+                    required:true,
+                  },
+
+                  status:{
                     required: true,
-                    minlength: 8
+                  
                 },
-              
-            },
+                  desc:{
+                      required: true,
+                      minlength: 10,
+                      maxlength: 20,
+                      lettersonly: true 
+                  },
+            
+          },
             messages: {
                 name: {
-                    required: "Please enter some data",
-                    minlength: "Your data must be at least 8 characters"
+                    required: "Please enter your name",
+                    minlength: "Your data must be at least 8 characters",
+                },
+                email:{
+                  required:"Please give your email",
+                  email:true,
+
+                },
+                gender:{
+                    required:"Select the radio button",
+                    gender:true,
+                },
+                qualification:{
+                    required:"Select your qualification",
+                },
+                birthday:{
+                  required:"Give your Date of birth",
+                },
+                status:{
+                  required:"Select if your are active user",
+                },
+                desc:{
+                  required: "Enter your message 3-20 characters",
+                  
+              
+                  
                 },
                 
-            }
+            },
+            errorElement: 'span',
+            errorClass: 'text-danger',
+          
+          
         });
     });
+   
   </script>
 </body>
 </html>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Information;
 use Illuminate\Http\Request;
-
+use validator;
 use Yajra\DataTables\DataTables;
 
 class homeController extends Controller
@@ -29,8 +29,7 @@ class homeController extends Controller
 
     public function getData(Request $request)
     {
-        // $query = Information::all();
-        // return DataTables::of(Information::all())->make(true);
+      
             if($request->ajax()){
                 $query = Information::all();
                 return Datatables::of($query)
@@ -56,24 +55,26 @@ class homeController extends Controller
      //store info
      public function store_info(Request $request)
      {
-    //     $request->validate([
-    //         'user_name'=>'required',
-    //         'email'=>'required|email|unique:information',
-    //         'gender'=>'required',
-    //         'qualification'=>'required',
-    //         'birthday'=>'required',
-    //         'status'=>'required',
-    //         'description'=>'required',
-           
+        
+    //     $validator = \Validator::make($request->all(),[
+    //                 'user_name'=>'required',
+    //                 'email'=>'required|email|unique:information',
+    //                 'gender'=>'required',
+    //                 'qualification'=>'required',
+    //                 'birthday'=>'required',
+    //                 'status'=>'required',
+    //                 'description'=>'required',
+    //     ],
+    //     [
+    //         'user_name.required'=>'User name is required',
     //     ]
-    // ,[
-    //     'user_name.required ' =>'User name is required',
-    //     'email.required'=>'Email is required',
-    //     'gender.required'=>'Gender is required',
-    //     'qualification.required'=>'Qualification is required',
-    // ]);
-        // print_r($request->toArray());
-        // return response()->json($request->toArray());
+    // );
+
+    // if ($validator->fails())
+    // {
+    //     return response()->json(['errors'=>$validator->errors()->all()]);
+    // }
+
         $info = new Information();
         $info->user_name=$request->user_name;
         $info->email=$request->email;

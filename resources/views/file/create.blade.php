@@ -15,23 +15,36 @@
 
     <div class="container">
         <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-md-6">
+            <div class="col-md-10">
 
             <div class="card-header">
                 <h1 align ="center">File </h1>
             </div>
             <div class="card">
+                
                 <form action="#" method="POST" id="multi-file-upload-ajax" enctype="multipart/form-data" id="formSubmit">
+                      @csrf
+                    <div class="file">
+                        <div class="row" id="addimage">
+                            <div class="col-md-5">
+                                <select class="form-select" aria-label="Default select example" id="info">
+                                    <option selected>Open this select menu</option>
+                                    @foreach($info as $info)
+                                    <option value="{{$info->id}}">{{$info->user_name}}</option>
+                                    @endforeach
+                                  </select>
+                            </div>
+                            <div class="col-md-5" >
+                                <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
+                            </div>
 
-                    @csrf
-                        <div class="card">
-                            <div class="mb-3">
-                                <input type="file" id="image-upload" name="image_upload[]" enctype="multipart/form-data" multiple>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success addMore" > + </button>
                             </div>
                         </div>
-                        <div class="">
-                            <button type="button" class="btn btn-primary" id="submit">Submit</button>
-                        </div> 
+                   
+                    </div> 
+                <button type="button" class="btn btn-primary btn-sm col-md-3 mt-3 submit" id="submit" >Submit</button>
                 </form>
             </div>
         </div>
@@ -39,6 +52,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
     <script>
          
 
@@ -48,17 +62,30 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             });
 
-            $('#image-upload').change(function () {
+
+            $('.addMore').click(function(){
+               $('#addimage').append(`
+               <div class="col-md-5 mt-3" id="addimage">
+                <input class="form-control image-upload" type="file" name="image_upload[]" enctype="multipart/form-data" multiple>
+                </div>`);
+            })
+
+
+            $('.submit').click(function () {
                 event.preventDefault();
+                let info_id = $('#info').val();
+                console.log(info_id)
                 let image_upload = new FormData();
-                // console.log(image_upload)
-                let TotalImages = $('#image-upload')[0].files.length;  //Total Images
-                let images = $('#image-upload')[0]; 
+                console.log($('.image-upload'));
+                let TotalImages = $('.image-upload').length;  //Total Images
+                let images = $('.image-upload'); 
+               
                 for (let i = 0; i < TotalImages; i++) {
-                    image_upload.append('images[]', images.files[i]);
+                    image_upload.append('images[]', images[i].files[0]);
                 }
                 image_upload.append('TotalImages', TotalImages);
-                // console.log(image_upload)
+                image_upload.append('info_id', info_id);
+              
 
                 $.ajax({
                     method: 'POST',
@@ -71,12 +98,32 @@
                         alert('File saved successfully');
                     },
                     error: function () {
-                    // console.log(`Failed`)
+                    
                     alert('Failed to save');
                     }
                 })
               
             })
+
+            //validate
+
+            $('#formSubmit').validate({
+                rules:{
+                    'image_upload[]':{
+                        required:true,
+                    }
+                },
+                messages:{
+                    'image_upload[]':{
+                        required:"please upload the images",
+                    }
+                }
+            });
+
+         
+
+          
+               
        
     })
     </script>
