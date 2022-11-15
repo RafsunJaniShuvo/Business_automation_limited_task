@@ -8,9 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <style>
        textarea.error{ border: 1px solid #FF0000 !important;}
+      body
+        {
+          font-family: Arial, Sans-serif;
+        }
+        .error
+        {
+        color:red;
+        font-family:verdana, Helvetica;
+        }
     </style>
+
   </head>
   <body>
     <div class="container mt-5">
@@ -76,6 +87,7 @@
                     <label for="gender">Male</label><br>
                     <input type="radio" id="gender" name="gender" value="0" >
                     <label for="gender">Female</label><br>
+                  <P id="check_radio"></P>
                 </div>
               </div>
             </div>
@@ -84,12 +96,13 @@
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
                   <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" required>
-                    <option selected>Open this select menu</option>
+                    <option >Open this select menu</option>
                     <option value="0">B.Sc</option>
                     <option value="1">H.Sc</option>
                     <option value="2">S.Sc</option>
                   </select>
-                
+                  
+                  <p id="select_dropdown"></p>
                 </div>
               </div>
               <div class="col-md-4">
@@ -97,6 +110,7 @@
                   <label for="birthday" class="form-label">Birthday</label>
                   <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" required>
                 </div>
+                <p id="message_birthday"></p>
               </div>
               <div class="col-md-4">
                 <div class="my-3">
@@ -339,6 +353,43 @@
 
   <script>
 
+    //custom message 
+    
+    $(".save").click(function(){
+      
+      //radio button message
+        let radiobutton = $("input[name='gender']:checked").val();
+        
+        if(!radiobutton){
+          document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
+          document.getElementById("check_radio").style.color="red";
+          
+        }
+
+        //select dropdown
+        let selectdrop= $('#qualification').val();
+        // console.log(selectdrop)
+        if(selectdrop=='Open this select menu')
+        {
+          document.getElementById("select_dropdown").innerHTML="Opps!! You have forgot to select qualification";
+          document.getElementById("select_dropdown").style.color="red";
+          
+          
+        }
+          
+          //select date
+        let date = $('#birthday').val();
+     
+        if(date===""){
+          document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";
+          document.getElementById("message_birthday").style.color="red";
+        }
+
+      
+
+
+      })
+
     $(function () {        
 
         $("#modal_form").validate({
@@ -393,24 +444,36 @@
                 },
                 qualification:{
                     required:"Select your qualification",
+                    qualification:true,
                 },
                 birthday:{
                   required:"Give your Date of birth",
+                  birthday:true,
                 },
                 status:{
                   required:"Select if your are active user",
+                  status:true,
                 },
                 desc:{
-                  required: "Enter your message 3-20 characters",
-                  
-              
-                  
+                  required:"Enter your message 3-20 characters",
+                  desc:true,
+
                 },
                 
             },
             errorElement: 'span',
             errorClass: 'text-danger',
-          
+            // errorPlacement: function(error, element) 
+            // {
+            //   let radiobutton = $("input[name='gender']:checked").val();
+
+
+            //   if(!radiobutton){
+            //     document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
+            //     document.getElementById("check_radio").style.color="red";
+                
+            //   }
+            // }
           
         });
     });
