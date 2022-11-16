@@ -25,6 +25,7 @@
   </head>
   <body>
     <div class="container mt-5">
+      
       <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 82%;">
         <i class="fa-solid fa-plus"></i>Add info
       </button>
@@ -72,6 +73,7 @@
           <div class="alert alert-danger" style="display:none"></div>
           <div class="modal-body">
             <form action="" id="modal_form">
+              @csrf
 
             <input type="number" id="id" hidden>
             <div class="row">
@@ -79,12 +81,16 @@
                 <div class="mb-3">
                   <label for="user_name" class="form-label required"> User Name</label>
                   <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name">
+           
+                  {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email address</label>
                   <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
+                  <span id="response_email" style="color:red;"> </span>
+              
                 </div>
               </div>
               <div class="col-md-4">
@@ -212,7 +218,7 @@
          {"data":null,
          render: function(data,type) {
         
-                console.log(data);
+                // console.log(data);
                 return '<img src="' + data.images + '" height="50" width="50"/>';
             
              }
@@ -245,7 +251,7 @@
           if(gender.length>0){
             gender=gender.val();
           }
-          // console.log(user_name,email,qualification,birthday,status,desc,gender)
+         
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -256,13 +262,17 @@
                 alert("Information saved successfully");
                 $('#exampleModal').hide();
                 location.reload();
+                // console.log(response.errors)
 
 
               }
             },
             error:function(response){
-              jQuery('.alert-danger').show();
-              alert("Failed to insert data");
+               
+                // alert("something went wrong");
+                console.log(response.responseJSON.errors.email);
+                $('#response_email').html(response.responseJSON.errors.email);
+               
             }
           })
           //  console.log('gender:',gender)
@@ -313,7 +323,7 @@
           if(gender.length>0){                                      //get radio button value
             gender=gender.val();                                    //get radio button value
           }                                                         //get radio button value
-          // console.log(id,user_name,email,qualification,birthday,status,desc,gender);
+         
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -329,7 +339,7 @@
               }
             },
             error:function(response){
-              alert("Failed to update data");
+              console.log(response.customMessages)
             }
           })
 
@@ -441,7 +451,7 @@
                   desc:{
                       required: true,
                       minlength: 10,
-                      maxlength: 20,
+                      maxlength: 1000,
                       lettersonly: true 
                   },
             

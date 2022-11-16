@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Information;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use validator;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class homeController extends Controller
@@ -42,7 +42,7 @@ class homeController extends Controller
                    
                     $url = asset('/images/test'.$image->images);
                    
-                    return '<img src="'.$url.'" style="width:40px;" class="img-rounded" align="center" />';
+                    return '<img src="'.$url.'" style="width:80px;" class="img-rounded" align="center" />';
                 })
                 ->addColumn('actions', function($row){
 
@@ -65,23 +65,31 @@ class homeController extends Controller
      //store info
      public function store_info(Request $request)
      {
-      
+        // dd($request->all());
+
         $validator = $request->validate([
                     'user_name'=>'required',
                     'email'=>'required|email|unique:information',
                     'gender'=>'required',
                     'qualification'=>'required',
                     'birthday'=>'required',
-                    'status'=>'required',
-                    'desc'=>'required'
+                    // 'status'=>'required',
+                    'desc'=>'required',
                 ],
                 [
                     'user_name.required'=>'User name is required',
+                    'email.required'=>'Email has to be unique',
+                    'gender.required'=>'Gender is required',
+                    'qualification.required'=>'Qualification is required',
+                    'birthday.required'=>'birth date is required',
+                    
                     
                 ]
             );
+        
 
-   
+        
+     
 
         $info = new Information();
         $info->user_name=$request->user_name;
@@ -92,10 +100,14 @@ class homeController extends Controller
         $info->status= $request->status;
         $info->description=$request->desc;
         $info->save();
-        return response()->json([
-            'status'=>'success'
-        ]);
+        // return response()->json([
+        //     'error'=>'success'
+        // ]);
+        return response()->json(['status' => 'success', 'messages' => "Data savedd Successfully"]);
+
+
         }
+    
 
         public function edit_info($id)
         {
