@@ -31,7 +31,7 @@
       </button>
 
       <div class="d-flex flex-row-reverse">
-        <a href="" class="btn btn-primary " style="margin-right: 9% !important;margin-bottom: 5px;"><i class="fa-solid fa-plus"></i>Images</a>
+        <a href="{{url('/image')}}" class="btn btn-primary " style="margin-right: 9% !important;margin-bottom: 5px;"><i class="fa-solid fa-plus"></i>Images</a>
       </div>
     
     
@@ -219,7 +219,7 @@
          render: function(data,type) {
         
                 // console.log(data);
-                return '<img src="' + data.images + '" height="50" width="50"/>';
+                return '<img src="' + data.images + '" height="100" width="100"/>';
             
              }
          },

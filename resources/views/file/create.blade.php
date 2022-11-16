@@ -47,7 +47,7 @@
                         </div>
                    
                     </div> 
-                <button type="button" class="btn btn-primary btn-sm col-md-3 mt-3 submit" id="submit" >Submit</button>
+                    <button type="button" class="btn btn-primary btn-sm submit" id="submit">Submit</button>
                 </form>
             </div>
         </div>
