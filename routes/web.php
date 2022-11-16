@@ -41,8 +41,7 @@ Route::post('/update-data/{id}',[homeController::class,'update_info'])->name('up
 Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
 
 //file
-
-Route::get('/file',[fileController::class,'create'])->name('create.file');
+Route::get('/image',[fileController::class,'create'])->name('create.file')->name('add_images');
 // Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
 Route::post('/image-upload', [fileController::class, 'storeMultiFile']);
 

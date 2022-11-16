@@ -28,6 +28,12 @@
       <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 82%;">
         <i class="fa-solid fa-plus"></i>Add info
       </button>
+
+      <div class="d-flex flex-row-reverse">
+        <a href="" class="btn btn-primary " style="margin-right: 9% !important;margin-bottom: 5px;"><i class="fa-solid fa-plus"></i>Images</a>
+      </div>
+    
+    
       
       <div class="row d-flex justify-content-center">
         <div class="col-md-12">
@@ -43,6 +49,7 @@
                   <th scope="col">Birthday</th>
                   <th scope="col">status</th>
                   <th scope="col">description</th>
+                  <th scope="col">Image</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -198,7 +205,18 @@
              return data.status =='0' ? 'Inactive' : 'Active';
             }
          },
-        {"data":"description"},
+
+         
+         {"data":"description"},
+
+         {"data":null,
+         render: function(data,type) {
+        
+                console.log(data);
+                return '<img src="' + data.images + '" height="50" width="50"/>';
+            
+             }
+         },
         {"data":"actions",
           },
       ]

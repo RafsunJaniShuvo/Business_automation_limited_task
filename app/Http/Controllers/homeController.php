@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Information;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use validator;
 use Yajra\DataTables\DataTables;
 
@@ -28,12 +29,21 @@ class homeController extends Controller
     }
 
     public function getData(Request $request)
-    {
+    {    
       
             if($request->ajax()){
-                $query = Information::all();
+              
+                $query = DB::table('information')
+                ->join('files','files.information_id','=','information.id')->get();
+            //    dd($query);
                 return Datatables::of($query)
-                ->addIndexColumn()
+                // ->addIndexColumn()
+                ->addColumn('image',function($image){
+                   
+                    $url = asset('/images/test'.$image->images);
+                   
+                    return '<img src="'.$url.'" style="width:40px;" class="img-rounded" align="center" />';
+                })
                 ->addColumn('actions', function($row){
 
                     // $btn = '<a href="#" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm edibutton">Edit</a>';
@@ -45,7 +55,7 @@ class homeController extends Controller
 
                         return $btn;
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['image','actions'])
                 ->make(true);
                 // return DataTables::of(Information::all())->make(true);
             }
@@ -55,25 +65,23 @@ class homeController extends Controller
      //store info
      public function store_info(Request $request)
      {
-        
-    //     $validator = \Validator::make($request->all(),[
-    //                 'user_name'=>'required',
-    //                 'email'=>'required|email|unique:information',
-    //                 'gender'=>'required',
-    //                 'qualification'=>'required',
-    //                 'birthday'=>'required',
-    //                 'status'=>'required',
-    //                 'description'=>'required',
-    //     ],
-    //     [
-    //         'user_name.required'=>'User name is required',
-    //     ]
-    // );
+      
+        $validator = $request->validate([
+                    'user_name'=>'required',
+                    'email'=>'required|email|unique:information',
+                    'gender'=>'required',
+                    'qualification'=>'required',
+                    'birthday'=>'required',
+                    'status'=>'required',
+                    'desc'=>'required'
+                ],
+                [
+                    'user_name.required'=>'User name is required',
+                    
+                ]
+            );
 
-    // if ($validator->fails())
-    // {
-    //     return response()->json(['errors'=>$validator->errors()->all()]);
-    // }
+   
 
         $info = new Information();
         $info->user_name=$request->user_name;
@@ -97,6 +105,22 @@ class homeController extends Controller
 
         public function update_info(Request $request,$id)
         {
+            // dd($request->all());
+             $request->validate([
+                'user_name'=>'required',
+                'email'=>'required|email',
+                'gender'=>'required',
+                'qualification'=>'required',
+                'birthday'=>'required',
+                'status'=>'required',
+                'desc'=>'required',
+            ],
+            [
+                'user_name.required'=>'User name is required',
+                'desc.required'=>'Short description is required',
+                
+            ]
+        );
             $info = Information::find($id);
             $info->user_name=$request->user_name;
             $info->email=$request->email;
@@ -105,6 +129,7 @@ class homeController extends Controller
             $info->birthday=$request->birthday;
             $info->status= $request->status;
             $info->description=$request->desc;
+       
             $info->update();
             return response()->json([
                 'status'=>'success'

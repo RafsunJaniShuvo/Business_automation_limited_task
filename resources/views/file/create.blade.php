@@ -22,7 +22,7 @@
             </div>
             <div class="card">
                 
-                <form action="#" method="POST" id="multi-file-upload-ajax" enctype="multipart/form-data" id="formSubmit">
+                <form action="#" method="POST" enctype="multipart/form-data" id="formSubmit">
                       @csrf
                     <div class="file">
                         <div class="row" id="addimage">
@@ -33,9 +33,12 @@
                                     <option value="{{$info->id}}">{{$info->user_name}}</option>
                                     @endforeach
                                   </select>
+
+                                  <p id="info_msg"></p>
                             </div>
                             <div class="col-md-5" >
                                 <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
+                                <p id="img_msg"></p>
                             </div>
 
                             <div class="col-md-2">
@@ -74,7 +77,7 @@
             $('.submit').click(function () {
                 event.preventDefault();
                 let info_id = $('#info').val();
-                console.log(info_id)
+                // console.log(info_id)
                 let image_upload = new FormData();
                 console.log($('.image-upload'));
                 let TotalImages = $('.image-upload').length;  //Total Images
@@ -94,7 +97,7 @@
                     contentType: false,
                     processData: false,
                     success: function (images) {
-                        // console.log(`ok ${images}`)
+                        
                         alert('File saved successfully');
                     },
                     error: function () {
@@ -106,7 +109,24 @@
             })
 
             //validate
+            $('.submit').click(function(){
+                let info_id=$('#info').val();
+             
+                
+                if(info_id==='Open this select menu'){
+                  
+                    document.getElementById("info_msg").innerHTML="Opps!You have forgot to select User Name";
+                    document.getElementById("info_msg").style.color="red";
+                }
+                let image = $('.image-upload').val();
+                if(!image){
+                   document.getElementById("img_msg").innerHTML="Opps! You have forgot to select images";
+                   document.getElementById("img_msg").style.color="red";
+                }
 
+              
+
+           
             $('#formSubmit').validate({
                 rules:{
                     'image_upload[]':{
@@ -120,7 +140,7 @@
                 }
             });
 
-         
+        });
 
           
                
