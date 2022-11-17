@@ -4,6 +4,7 @@ use App\Http\Middleware\CustomAuth;
 use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\fileController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\stepperController;
 use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -32,19 +33,23 @@ Route::middleware([CustomAuth::class])->group(function () {
     Route::get('/log-out',[CustomAuthController::class,'logout'])->name('logout');  
     
     
-    //Home
-Route::get('/home',[homeController::class,'manage'])->name('home.manage');
-Route::get('/get-data',[homeController::class,'getData'])->name('ajax.getData');
-Route::post('/store-data',[homeController::class,'store_info'])->name('store_info');
-Route::get('/edit-data/{id}',[homeController::class,'edit_info'])->name('edit_info');
-Route::post('/update-data/{id}',[homeController::class,'update_info'])->name('update_info');
-Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
+        //Home
+    Route::get('/home',[homeController::class,'manage'])->name('home.manage');
+    Route::get('/get-data',[homeController::class,'getData'])->name('ajax.getData');
+    Route::post('/store-data',[homeController::class,'store_info'])->name('store_info');
+    Route::get('/edit-data/{id}',[homeController::class,'edit_info'])->name('edit_info');
+    Route::post('/update-data/{id}',[homeController::class,'update_info'])->name('update_info');
+    Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
 
-//file
-Route::get('/image',[fileController::class,'create'])->name('create.file')->name('add_images');
-// Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
-Route::post('/image-upload', [fileController::class, 'storeMultiFile']);
+    //file
+    Route::get('/image',[fileController::class,'create'])->name('create.file')->name('add_images');
+    // Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
+    Route::post('/image-upload', [fileController::class, 'storeMultiFile']);
 
+
+    //stepper
+    Route::get('/step_1',[stepperController::class,'create'])->name('stepper');
+    Route::get('/step_2',[stepperController::class,'create_2'])->name('stepper_2');
 
 
     
