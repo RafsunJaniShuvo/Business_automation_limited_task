@@ -12,6 +12,6 @@ class stepperController extends Controller
     }
     public function create_2()
     {
-        return view('stepper.create2');
+        return view('stepper.create3');
     }
 }

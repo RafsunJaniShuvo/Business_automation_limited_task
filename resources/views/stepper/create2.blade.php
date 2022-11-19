@@ -29,10 +29,57 @@
       
        
       </div>
-          
-      <button class="btn" id="prev" disabled>Prev</button>
-      <button class="btn" id="next" >Next</button>
-    </div>
+    
+      {{-- User Info --}}
+      <div class="container">
+        <div class="row ">
+          <div class="card dflex justify-content-center">
+            <div class="col-md-10">
+            <h1>User Info</h1>
+              <div class="input-group">
+                <label for="username" class="mt-2">First Name </label>
+                <input type="text" id="username" name="username" class="form-control">
+              </div>
+              <div class="input-group">
+                <label for="username" class="mt-2">Last Name </label>
+                <input type="text" id="username" name="username" class="form-control">
+              </div>
+              <button class="btn" id="prev" disabled>Prev</button>
+              <button class="btn" id="next" >Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Contact Info --}}
+
+      <div class="container">
+        <div class="row my-3">
+          <div class="card dflex justify-content-center">
+            <div class="col-md-10">
+            <h1>Contact Info</h1>
+              <div class="input-group">
+                {{-- <label for="username" class="mt-2">Email</label> --}}
+                Email:
+                <input type="email" id="username" name="username" class="form-control mb-2">
+              </div>
+              <div class="input-group">
+                {{-- <label for="username" class="mt-2"> Phone </label> --}}
+                Phone:
+                <input type="number" id="username" name="username" class="form-control">
+              </div>
+              <div></div>
+              <button class="btn" id="prev" >Prev</button>
+              <button class="btn" id="next" >Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+    </div>   
+      
+   
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>

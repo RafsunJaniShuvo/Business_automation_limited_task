@@ -7,29 +7,13 @@ use App\Http\Controllers\homeController;
 use App\Http\Controllers\stepperController;
 use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Route::get('/home',[homeController::class,'create'])->name('home');
  
 Route::middleware([CustomAuth::class])->group(function () {
    
-    Route::get('/dashboard',[CustomAuthController::class,'dashboard'])->name('dashboard');
+   
     Route::get('/log-out',[CustomAuthController::class,'logout'])->name('logout');  
     
     
@@ -42,8 +26,7 @@ Route::middleware([CustomAuth::class])->group(function () {
     Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
 
     //file
-    Route::get('/image',[fileController::class,'create'])->name('create.file')->name('add_images');
-    // Route::post('/image-upload',[fileController::class,'store_image'])->name('store_image');
+    Route::get('/image',[fileController::class,'create'])->name('add_images');
     Route::post('/image-upload', [fileController::class, 'storeMultiFile']);
 
 
@@ -54,6 +37,9 @@ Route::middleware([CustomAuth::class])->group(function () {
 
     
 });
+
+// Dashboard
+Route::get('/',[CustomAuthController::class,'dashboard'])->name('dashboard');
 // authentication
 Route::get('/login',[CustomAuthController::class,'index'])->name('login');
 Route::post('/custom-login',[CustomAuthController::class,'customLogin'])->name('customLogin');

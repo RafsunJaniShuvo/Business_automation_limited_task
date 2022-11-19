@@ -25,40 +25,55 @@
   </head>
   <body>
     <div class="container mt-5">
-      
-      <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 82%;">
-        <i class="fa-solid fa-plus"></i>Add info
-      </button>
+        
+      <div class="d-flex justify-content-between bd-highlight">
+        <div>
+          <a href="{{route('dashboard')}}" class="btn btn-success" >
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+          </a>
+        </div>
 
-      <div class="d-flex flex-row-reverse">
-        <a href="{{url('/image')}}" class="btn btn-primary " style="margin-right: 9% !important;margin-bottom: 5px;"><i class="fa-solid fa-plus"></i>Images</a>
+        <div>
+          <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="fa-solid fa-plus"></i>
+            Add info
+          </button>
+
+          <a href="{{url('/image')}}" class="btn btn-primary mb-2 addinfo" style="margin-right: 20px;">
+            <i class="fa-solid fa-plus"></i>
+            Images
+          </a>
+
+        
+        </div>
+      
       </div>
-    
+ 
+   
     
       
       <div class="row d-flex justify-content-center">
-        <div class="col-md-12">
-          <div class="card">
-            <table class="table" id="myTable">
-              <thead>
-                <tr>
-                  <th scope="col">Sl_No.</th>
-                  <th scope="col">User Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Qualification</th>
-                  <th scope="col">Birthday</th>
-                  <th scope="col">status</th>
-                  <th scope="col">description</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-             
-              </tbody>
-            </table>
-        </div>
+        <div class="col-md-12 mx-auto">
+              <table class="table "  id="myTable" >
+                <thead>
+                  <tr>
+                    <th scope="col">Sl_No.</th>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Qualification</th>
+                    <th scope="col">Birthday</th>
+                    <th scope="col">status</th>
+                    <th scope="col">description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+               
+                </tbody>
+              </table>
         </div>
       </div>
 
@@ -133,11 +148,28 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+
+
+            <div class="row" id="addimage">
+
+              <div class="col-md-4">
+               
+                  <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
+                  <p id="img_msg"></p> 
+              </div>
+              <div class="col-md-5">
+                <button type="button" class="btn btn-success addMore" > + </button>
+              </div>
+
+            </div>
+
+
+            <div class="row" >
               <div class="col-md-12">
                 <label for="desc">Description</label>
                 <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" > </textarea>
               </div>
+              
             </div>
 
             </form>
@@ -183,7 +215,7 @@
           render:function(data,type,row)
           { 
            
-            return data.gender =='0'?'Female':'Male';
+            return data.gender == '0' ? 'Female' : 'Male';
           }
         },
         {"data":null,
@@ -219,7 +251,7 @@
          render: function(data,type) {
         
                 // console.log(data);
-                return '<img src="' + data.images + '" height="100" width="100"/>';
+                return '<img src="' + data.images + '" height="100px" width="100px"/>';
             
              }
          },
@@ -236,6 +268,16 @@
           $('.update').hide();
         })
      })
+
+    //  append input multiple images
+    $('.addMore').click(function(){
+            $('#addimage').append(`
+            <div class="col-md-4">
+               
+               <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
+               <p id="img_msg"></p> 
+           </div>`);
+        })
    
      ///Save
 
@@ -251,7 +293,13 @@
           if(gender.length>0){
             gender=gender.val();
           }
-         
+         const formData = {
+          user_name:user_name,
+          email:email,
+          qualification:qualification,
+          birthday:birthday,
+          status:status
+         };
           $.ajax({
             type:"POST",
             dataType:"json",
