@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\Information;
 use App\Models\File;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class HomeController extends Controller
             ->leftJoin('files','files.information_id','=','information.id')->get();
 
             return Datatables::of($query)
-            // ->addIndexColumn()
+
             ->addColumn('image',function($image){
 
                 $url = asset('/images/test'.$image->images);
@@ -48,7 +49,7 @@ class HomeController extends Controller
             })
             ->rawColumns(['image','actions'])
             ->make(true);
-            // return DataTables::of(Information::all())->make(true);
+
         }
         return false;
 
@@ -60,7 +61,10 @@ class HomeController extends Controller
 
 
 
-        // return response()->json($request->all());
+
+=
+
+
 
     // $validator = $request->validate([
     //             'user_name'=>'required',
@@ -79,7 +83,6 @@ class HomeController extends Controller
     //             'birthday.required'=>'birth date is required',
     //         ]
     //     );
-
 
         try{
 

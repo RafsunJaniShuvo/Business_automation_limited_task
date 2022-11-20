@@ -66,7 +66,7 @@ class CustomAuthController extends Controller
         ]);
         $credendital = $request->only('email','password');
         // dd($credendital);
-        if(AUth::attempt($credendital)){
+        if(Auth::attempt($credendital)){
             return redirect('/')->withSuccess('Signed In');
         }
         return redirect('login')->withSuccess('Login details are not valid');
