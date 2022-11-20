@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\Information;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -56,8 +57,8 @@ class homeController extends Controller
     //store info
     public function store_info(Request $request)
     {
-        dd($request->all(),121);
-        // return response()->json($request->all());
+        dd($request->all());
+       
 
     // $validator = $request->validate([
     //             'user_name'=>'required',
@@ -77,15 +78,35 @@ class homeController extends Controller
     //         ]
     //     );
 
-        $info = new Information();
-        $info->user_name=$request->user_name;
-        $info->email=$request->email;
-        $info->gender=$request->gender;
-        $info->qualification=$request->qualification;
-        $info->birthday=$request->birthday;
-        $info->status= $request->status;
-        $info->description=$request->desc;
-        $info->save();
+
+        try {
+
+           DB::beginTransaction();
+           $info = new Information();
+           $info->user_name=$request->name;
+           $info->email=$request->email;
+           $info->gender=$request->gender;
+           $info->qualification=$request->qualification;
+           $info->birthday=$request->birthday;
+           $info->status= $request->status;
+           $info->description=$request->desc;
+           $info->save();
+           $file = new File();
+           $file->information_id = $request->id;
+           $file->images = $request->images;
+
+
+           
+
+
+           DB::commit();
+        
+        }
+        catch (\Throwable $e) {
+            DB::rollBack();
+           
+        }
+     
     
         return response()->json([
             'status' => 'success', 

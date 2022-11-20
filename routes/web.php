@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\fileController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\stepperController;
-use App\Http\Middleware\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -47,4 +47,6 @@ Route::get('/regsitration',[CustomAuthController::class,'registration'])->name('
 Route::post('/custom-registration',[CustomAuthController::class,'customRegistration'])->name('custom-registration');
 
      
-
+// Route::get('/test', function() {
+//     dd(Auth::user());
+// });
