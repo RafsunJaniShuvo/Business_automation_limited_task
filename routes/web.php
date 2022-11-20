@@ -10,20 +10,20 @@ use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Route::get('/home',[homeController::class,'create'])->name('home');
- 
+
 Route::middleware([CustomAuth::class])->group(function () {
-   
-   
-    Route::get('/log-out',[CustomAuthController::class,'logout'])->name('logout');  
-    
-    
+
+
+    Route::get('/log-out',[CustomAuthController::class,'logout'])->name('logout');
+
+
         //Home
-    Route::get('/home',[homeController::class,'manage'])->name('home.manage');
-    Route::get('/get-data',[homeController::class,'getData'])->name('ajax.getData');
-    Route::post('/store-data',[homeController::class,'store_info'])->name('store_info');
-    Route::get('/edit-data/{id}',[homeController::class,'edit_info'])->name('edit_info');
-    Route::post('/update-data/{id}',[homeController::class,'update_info'])->name('update_info');
-    Route::get('/delete-data/{id}',[homeController::class,'delete_info'])->name('delete_info');
+    Route::get('/home',[HomeController::class,'manage'])->name('home.manage');
+    Route::get('/get-data',[HomeController::class,'getData'])->name('ajax.getData');
+    Route::post('/store-data',[HomeController::class,'store_info'])->name('store_info');
+    Route::get('/edit-data/{id}',[HomeController::class,'edit_info'])->name('edit_info');
+    Route::post('/update-data/{id}',[HomeController::class,'update_info'])->name('update_info');
+    Route::get('/delete-data/{id}',[HomeController::class,'delete_info'])->name('delete_info');
 
     //file
     Route::get('/image',[fileController::class,'create'])->name('add_images');
@@ -35,7 +35,7 @@ Route::middleware([CustomAuth::class])->group(function () {
     Route::get('/step_2',[stepperController::class,'create_2'])->name('stepper_2');
 
 
-    
+
 });
 
 // Dashboard
@@ -46,5 +46,5 @@ Route::post('/custom-login',[CustomAuthController::class,'customLogin'])->name('
 Route::get('/regsitration',[CustomAuthController::class,'registration'])->name('register');
 Route::post('/custom-registration',[CustomAuthController::class,'customRegistration'])->name('custom-registration');
 
-     
+
 

@@ -3,40 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Information;
+use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class homeController extends Controller
+class HomeController extends Controller
 {
 
     public function manage()
     {
         $info = Information::all();
-      
+
         return view('home.manage');
     }
 
     public function getData(Request $request)
-    {    
-    
+    {
+
         if($request->ajax()){
-            
+
             $query = DB::table('information')
             ->leftJoin('files','files.information_id','=','information.id')->get();
-               
+
             return Datatables::of($query)
             // ->addIndexColumn()
             ->addColumn('image',function($image){
-                
+
                 $url = asset('/images/test'.$image->images);
-                
+
                 return '<img src="'.$url.'" style="width:80px;" class="img-fluid" align="center" />';
             })
             ->addColumn('actions', function($row){
 
-               
+
                 $btn =' <button type="button" class="btn btn-success editbutton" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#exampleModal" >
                 <i class="fa-solid fa-pen-to-square"></i>
                 </button>';
@@ -56,7 +57,9 @@ class homeController extends Controller
     //store info
     public function store_info(Request $request)
     {
-        dd($request->all(),121);
+
+
+
         // return response()->json($request->all());
 
     // $validator = $request->validate([
@@ -77,23 +80,61 @@ class homeController extends Controller
     //         ]
     //     );
 
-        $info = new Information();
-        $info->user_name=$request->user_name;
-        $info->email=$request->email;
-        $info->gender=$request->gender;
-        $info->qualification=$request->qualification;
-        $info->birthday=$request->birthday;
-        $info->status= $request->status;
-        $info->description=$request->desc;
-        $info->save();
-    
-        return response()->json([
-            'status' => 'success', 
-            'messages' => "Data saved Successfully"
-        ]);
 
+        try{
+
+            DB::beginTransaction();
+
+            $info = new Information();
+
+            $info->user_name=$request->name;
+            $info->email=$request->email;
+            $info->gender=$request->gender;
+            $info->qualification=$request->qualification;
+            $info->birthday=$request->birthday;
+            if($request->status){
+                $info->status= $request->status;
+            }else{
+                $info->status= 0;
+            }
+            $info->description=$request->desc;
+            $info->save();
+
+
+            if ($request->hasFile('image_upload')) {
+                $images = $request->file('image_upload');
+                foreach ($images as $image) {
+                    $file = new File();
+
+                    $imagesName = $image->getClientOriginalName();
+                    $ans= $image->move( public_path().'/images/test', $imagesName);
+                    $file->images = '/images/test/'.$imagesName;
+                    $file->information_id=$info->id;
+                    $file->save();
+
+                }
+
+            }
+
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'messages' => "Data saved Successfully"
+            ]);
+
+
+        }
+        catch(\Throwable $e){
+            DB::rollback();
+
+        }
 
     }
+
+
+
 
 
     public function edit_info($id)
@@ -104,7 +145,7 @@ class homeController extends Controller
 
     public function update_info(Request $request,$id)
     {
-        
+
             $request->validate([
             'user_name'=>'required',
             'email'=>'required|email',
@@ -121,7 +162,7 @@ class homeController extends Controller
             'qualification.required'=>'Qualification is required',
             'birthday.required'=>'Birthday is required',
             'desc.required'=>'Short description is required',
-            
+
         ]);
 
         $info = Information::find($id);
@@ -132,7 +173,7 @@ class homeController extends Controller
         $info->birthday=$request->birthday;
         $info->status= $request->status;
         $info->description=$request->desc;
-    
+
         $info->update();
         return response()->json([
             'status'=>'success'
@@ -147,7 +188,7 @@ class homeController extends Controller
             'status'=>'success'
         ]);
     }
-    
+
 }
-        
-       
+
+

@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+
     <style>
        textarea.error{ border: 1px solid #FF0000 !important;}
       body
@@ -25,7 +25,7 @@
   </head>
   <body>
     <div class="container mt-5">
-        
+
       <div class="d-flex justify-content-between bd-highlight">
         <div>
           <a href="{{route('dashboard')}}" class="btn btn-success" >
@@ -45,14 +45,14 @@
             Images
           </a>
 
-        
+
         </div>
-      
+
       </div>
- 
-   
-    
-      
+
+
+
+
       <div class="row d-flex justify-content-center">
         <div class="col-md-12 mx-auto">
               <table class="table "  id="myTable" >
@@ -71,7 +71,7 @@
                   </tr>
                 </thead>
                 <tbody>
-               
+
                 </tbody>
               </table>
         </div>
@@ -96,7 +96,7 @@
                   <div class="mb-3">
                     <label for="user_name" class="form-label required"> User Name</label>
                     <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name">
-            
+
                     {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
                   </div>
                 </div>
@@ -105,7 +105,7 @@
                     <label for="email" class="form-label">Email address</label>
                     <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
                     <span id="response_email" style="color:red;"> </span>
-                
+
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -129,7 +129,7 @@
                       <option value="1">H.Sc</option>
                       <option value="2">S.Sc</option>
                     </select>
-                    
+
                     <p id="select_dropdown"></p>
                   </div>
                 </div>
@@ -144,7 +144,7 @@
                   <div class="my-3">
                     <label for="status" class="form-label">is_active?</label>
                     <input type="checkbox" name="status" id="status" value="1">
-                
+
                   </div>
                 </div>
               </div>
@@ -153,9 +153,9 @@
               <div class="row" id="addimage">
 
                 <div class="col-md-4">
-                
+
                     <input class="form-control image-upload" type="file"  name="image_upload[]" accept="" enctype="multipart/form-data" multiple>
-                    <p id="img_msg"></p> 
+                    <p id="img_msg"></p>
                 </div>
                 <div class="col-md-5">
                   <button type="button" class="btn btn-success addMore" > + </button>
@@ -169,7 +169,7 @@
                   <label for="desc">Description</label>
                   <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" > </textarea>
                 </div>
-                
+
               </div>
               </div>
               <div class="modal-footer">
@@ -188,11 +188,11 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
-    
+
     <script>
-  
-  
-      
+
+
+
 
     $.ajaxSetup({
         headers: {
@@ -212,8 +212,8 @@
         {"data":"email"},
         {"data":null,
           render:function(data,type,row)
-          { 
-           
+          {
+
             return data.gender == '0' ? 'Female' : 'Male';
           }
         },
@@ -243,21 +243,21 @@
             }
          },
 
-         
+
          {"data":"description"},
 
          {"data":null,
          render: function(data,type) {
-        
+
                 // console.log(data);
                 return '<img src="' + data.images + '" height="100px" width="100px"/>';
-            
+
              }
          },
         {"data":"actions",
           },
       ]
-     
+
 
      });
 
@@ -272,18 +272,18 @@
     $('.addMore').click(function(){
             $('#addimage').append(`
             <div class="col-md-4">
-               
+
                <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
-               <p id="img_msg"></p> 
+               <p id="img_msg"></p>
            </div>`);
         });
-   
+
      ///Save
 
     //   $('#modal_form').submit(function(e){
     //     e.preventDefault()
-    
-    
+
+
 
     //       let user_name=$('#user_name').val();
     //       let email= $('#email').val();
@@ -310,7 +310,7 @@
     //         dataType:"json",
     //         url:"{{route('store_info')}}",
     //         data:{user_name:user_name,email:email,qualification:qualification,birthday:birthday,status:status,desc:desc,gender:gender},
-          
+
     //         // data:formdata,
     //         contentType: false,
     //         processData: false,
@@ -326,16 +326,16 @@
     //           }
     //         },
     //         error:function(response){
-               
+
     //             // alert("something went wrong");
     //             console.log(response.responseJSON.errors.email);
     //             $('#response_email').html(response.responseJSON.errors.email);
-               
+
     //         }
     //       })
     //       //  console.log('gender:',gender)
     //       // console.log(user_name,email,gender,qualification,birthday,status,desc)
-      
+
     //  })
 
 
@@ -368,7 +368,7 @@
      //update information
      $(document).on('click','.update',function(){
           let id = $('#id').val();
-      
+
           let user_name=$('#user_name').val();
           let email= $('#email').val();
           let qualification= $('#qualification').val();
@@ -379,7 +379,7 @@
           if(gender.length>0){                                      //get radio button value
             gender=gender.val();                                    //get radio button value
           }                                                         //get radio button value
-         
+
           $.ajax({
             type:"POST",
             dataType:"json",
@@ -415,7 +415,7 @@
             success:function(response){
               if(response.status=='success'){
                 alert('Information Deleted Successfully');
-                
+
                 location.reload();
               }
             },
@@ -427,27 +427,27 @@
 
      })
 
-    
+
 
    })
 
 
- 
+
   </script>
 
   <script>
 
-    //custom message 
-    
+    //custom message
+
     // $(".save").click(function(){
-      
+
     //   radio button message
     //     let radiobutton = $("input[name='gender']:checked").val();
-        
+
     //     if(!radiobutton){
     //       document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
     //       document.getElementById("check_radio").style.color="red";
-          
+
     //     }
 
     //     //select dropdown
@@ -457,27 +457,27 @@
     //     {
     //       document.getElementById("select_dropdown").innerHTML="Opps!! You have forgot to select qualification";
     //       document.getElementById("select_dropdown").style.color="red";
-          
-          
+
+
     //     }
-          
+
     //       //select date
     //     let date = $('#birthday').val();
-     
+
     //     if(date===""){
     //       document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";
     //       document.getElementById("message_birthday").style.color="red";
     //     }
 
-      
+
 
 
     //   })
 
-    // $(function () {        
+    // $(function () {
 
     //     $("#modal_form").validate({
-        
+
     //         rules: {
     //           name: {
     //                   required: true,
@@ -502,7 +502,7 @@
 
     //               status:{
     //                 required: true,
-                  
+
     //             },
     //               desc:{
     //                   required: true,
@@ -510,7 +510,7 @@
     //                   maxlength: 1000,
     //                   lettersonly: true,
     //               },
-            
+
     //       },
     //         messages: {
     //             name: {
@@ -543,11 +543,11 @@
     //               desc:true,
 
     //             },
-                
+
     //         },
     //         errorElement: 'span',
     //         errorClass: 'text-danger',
-    //         // errorPlacement: function(error, element) 
+    //         // errorPlacement: function(error, element)
     //         // {
     //         //   let radiobutton = $("input[name='gender']:checked").val();
 
@@ -555,13 +555,13 @@
     //         //   if(!radiobutton){
     //         //     document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
     //         //     document.getElementById("check_radio").style.color="red";
-                
+
     //         //   }
     //         // }
-          
+
     //     });
     // });
-   
+
   </script>
 
   <script>
@@ -570,7 +570,7 @@
 
             var formData = new FormData($('#modal_form')[0]);
 
-            // let values = 
+            // let values =
           //  let formData = {
           //     'user_name': $('#user_name').val(),
           //     'email':  $('#email').val(),
@@ -596,7 +596,7 @@
             dataType:"json",
             url:"{{route('store_info')}}",
             data: formData,
-          
+
             // data:formdata,
             contentType: false,
             processData: false,
@@ -604,24 +604,24 @@
             success:function(response){
               if(response.status=='success'){
                 alert("Information saved successfully");
-                $('#exampleModal').hide();
-                location.reload();
+                // $('#exampleModal').hide();
+                // location.reload();
                 // console.log(response.errors)
 
 
               }
             },
             error:function(response){
-               
+
                 // alert("something went wrong");
                 console.log(response.responseJSON.errors.email);
                 $('#response_email').html(response.responseJSON.errors.email);
-               
+
             }
           })
           //  console.log('gender:',gender)
           // console.log(user_name,email,gender,qualification,birthday,status,desc)
-      
+
      })
   </script>
 </body>
