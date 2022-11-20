@@ -14,6 +14,7 @@ class homeController extends Controller
     public function manage()
     {
         $info = Information::all();
+      
         return view('home.manage');
     }
 
@@ -23,8 +24,8 @@ class homeController extends Controller
         if($request->ajax()){
             
             $query = DB::table('information')
-            ->join('files','files.information_id','=','information.id')->get();
-            //    dd($query);
+            ->leftJoin('files','files.information_id','=','information.id')->get();
+               
             return Datatables::of($query)
             // ->addIndexColumn()
             ->addColumn('image',function($image){
@@ -35,7 +36,7 @@ class homeController extends Controller
             })
             ->addColumn('actions', function($row){
 
-                // $btn = '<a href="#" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm edibutton">Edit</a>';
+               
                 $btn =' <button type="button" class="btn btn-success editbutton" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#exampleModal" >
                 <i class="fa-solid fa-pen-to-square"></i>
                 </button>';
@@ -55,25 +56,26 @@ class homeController extends Controller
     //store info
     public function store_info(Request $request)
     {
+        dd($request->all(),121);
         // return response()->json($request->all());
 
-    $validator = $request->validate([
-                'user_name'=>'required',
-                'email'=>'required|email|unique:information',
-                'gender'=>'required',
-                'qualification'=>'required',
-                'birthday'=>'required',
-                // 'status'=>'required',
-                'desc'=>'required',
-            ],
-            [
-                'user_name.required'=>'User name is required',
-                'email.required'=>'Email has to be unique',
-                'gender.required'=>'Gender is required',
-                'qualification.required'=>'Qualification is required',
-                'birthday.required'=>'birth date is required',
-            ]
-        );
+    // $validator = $request->validate([
+    //             'user_name'=>'required',
+    //             'email'=>'required|email|unique:information',
+    //             'gender'=>'required',
+    //             'qualification'=>'required',
+    //             'birthday'=>'required',
+    //             // 'status'=>'required',
+    //             'desc'=>'required',
+    //         ],
+    //         [
+    //             'user_name.required'=>'User name is required',
+    //             'email.required'=>'Email has to be unique',
+    //             'gender.required'=>'Gender is required',
+    //             'qualification.required'=>'Qualification is required',
+    //             'birthday.required'=>'birth date is required',
+    //         ]
+    //     );
 
         $info = new Information();
         $info->user_name=$request->user_name;

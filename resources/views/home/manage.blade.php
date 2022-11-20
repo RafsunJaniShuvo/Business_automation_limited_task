@@ -87,99 +87,98 @@
           </div>
           <div class="alert alert-danger" style="display:none"></div>
           <div class="modal-body">
-            <form action="" id="modal_form">
+            <form action="#" id="modal_form" enctype="multipart/form-data">
               @csrf
 
-            <input type="number" id="id" hidden>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label for="user_name" class="form-label required"> User Name</label>
-                  <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name">
-           
-                  {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
+              <input type="number" id="id" hidden>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="user_name" class="form-label required"> User Name</label>
+                    <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name">
+            
+                    {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
+                    <span id="response_email" style="color:red;"> </span>
+                
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <span>Gender</span><br>
+                      <input type="radio" id="gender" name="gender"  value="1" >
+                      <label for="gender">Male</label><br>
+                      <input type="radio" id="gender" name="gender" value="0" >
+                      <label for="gender">Female</label><br>
+                    <P id="check_radio"></P>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email address</label>
-                  <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
-                  <span id="response_email" style="color:red;"> </span>
-              
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
+                    <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" required>
+                      <option >Open this select menu</option>
+                      <option value="0">B.Sc</option>
+                      <option value="1">H.Sc</option>
+                      <option value="2">S.Sc</option>
+                    </select>
+                    
+                    <p id="select_dropdown"></p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="birthday" class="form-label">Birthday</label>
+                    <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" required>
+                  </div>
+                  <p id="message_birthday"></p>
+                </div>
+                <div class="col-md-4">
+                  <div class="my-3">
+                    <label for="status" class="form-label">is_active?</label>
+                    <input type="checkbox" name="status" id="status" value="1">
+                
+                  </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <span>Gender</span><br>
-                    <input type="radio" id="gender" name="gender"  value="1" >
-                    <label for="gender">Male</label><br>
-                    <input type="radio" id="gender" name="gender" value="0" >
-                    <label for="gender">Female</label><br>
-                  <P id="check_radio"></P>
+
+
+              <div class="row" id="addimage">
+
+                <div class="col-md-4">
+                
+                    <input class="form-control image-upload" type="file"  name="image_upload[]" accept="" enctype="multipart/form-data" multiple>
+                    <p id="img_msg"></p> 
                 </div>
+                <div class="col-md-5">
+                  <button type="button" class="btn btn-success addMore" > + </button>
+                </div>
+
+              </div>
+
+
+              <div class="row" >
+                <div class="col-md-12">
+                  <label for="desc">Description</label>
+                  <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" > </textarea>
+                </div>
+                
+              </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary save">Save</button>
+                <button type="button" class="btn btn-primary update">Update</button>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
-                  <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" required>
-                    <option >Open this select menu</option>
-                    <option value="0">B.Sc</option>
-                    <option value="1">H.Sc</option>
-                    <option value="2">S.Sc</option>
-                  </select>
-                  
-                  <p id="select_dropdown"></p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label for="birthday" class="form-label">Birthday</label>
-                  <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" required>
-                </div>
-                <p id="message_birthday"></p>
-              </div>
-              <div class="col-md-4">
-                <div class="my-3">
-                  <label for="status" class="form-label">is_active?</label>
-                  <input type="checkbox" name="status" id="status" value="1">
-               
-                </div>
-              </div>
-            </div>
-
-
-            <div class="row" id="addimage">
-
-              <div class="col-md-4">
-               
-                  <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
-                  <p id="img_msg"></p> 
-              </div>
-              <div class="col-md-5">
-                <button type="button" class="btn btn-success addMore" > + </button>
-              </div>
-
-            </div>
-
-
-            <div class="row" >
-              <div class="col-md-12">
-                <label for="desc">Description</label>
-                <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" > </textarea>
-              </div>
-              
-            </div>
-
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary save">Save</button>
-            <button type="button" class="btn btn-primary update">Update</button>
-          </div>
-        </div>
+          </form>
       </div>
 
     </div>
@@ -277,58 +276,67 @@
                <input class="form-control image-upload" type="file"  name="image_upload[]" enctype="multipart/form-data" multiple>
                <p id="img_msg"></p> 
            </div>`);
-        })
+        });
    
      ///Save
 
-     $(document).ready(function(){
-        $('.save').click(function(){
-          let user_name=$('#user_name').val();
-          let email= $('#email').val();
-          let qualification= $('#qualification').val();
-          let birthday=$('#birthday').val() ;
-          let status=$('#status').val() ;
-          let desc=$('#desc').val() ;
-          let gender=$("input[type='radio'][name='gender']:checked");
-          if(gender.length>0){
-            gender=gender.val();
-          }
-         const formData = {
-          user_name:user_name,
-          email:email,
-          qualification:qualification,
-          birthday:birthday,
-          status:status
-         };
-          $.ajax({
-            type:"POST",
-            dataType:"json",
-            url:"{{route('store_info')}}",
-            data:{user_name:user_name,email:email,qualification:qualification,birthday:birthday,status:status,desc:desc,gender:gender},
-            success:function(response){
-              if(response.status=='success'){
-                alert("Information saved successfully");
-                $('#exampleModal').hide();
-                location.reload();
-                // console.log(response.errors)
+    //   $('#modal_form').submit(function(e){
+    //     e.preventDefault()
+    
+    
+
+    //       let user_name=$('#user_name').val();
+    //       let email= $('#email').val();
+    //       let qualification= $('#qualification').val();
+    //       let birthday=$('#birthday').val() ;
+    //       let status=$('#status').val() ;
+    //       let desc=$('#desc').val() ;
+    //       let gender=$("input[type='radio'][name='gender']:checked");
+    //       if(gender.length>0){
+    //         gender=gender.val();
+    //       }
+
+    //       // formdata.append('user_name',user_name);
+    //       // formdata.append('email',email);
+    //       // formdata.append('qualification',qualification);
+    //       // formdata.append('birthday',birthday);
+    //       // formdata.append('status',status);
+    //       // formdata.append('desc',desc);
+    //       // formdata.append('gender',gender);
 
 
-              }
-            },
-            error:function(response){
+    //       $.ajax({
+    //         type:"POST",
+    //         dataType:"json",
+    //         url:"{{route('store_info')}}",
+    //         data:{user_name:user_name,email:email,qualification:qualification,birthday:birthday,status:status,desc:desc,gender:gender},
+          
+    //         // data:formdata,
+    //         contentType: false,
+    //         processData: false,
+
+    //         success:function(response){
+    //           if(response.status=='success'){
+    //             alert("Information saved successfully");
+    //             $('#exampleModal').hide();
+    //             location.reload();
+    //             // console.log(response.errors)
+
+
+    //           }
+    //         },
+    //         error:function(response){
                
-                // alert("something went wrong");
-                console.log(response.responseJSON.errors.email);
-                $('#response_email').html(response.responseJSON.errors.email);
+    //             // alert("something went wrong");
+    //             console.log(response.responseJSON.errors.email);
+    //             $('#response_email').html(response.responseJSON.errors.email);
                
-            }
-          })
-          //  console.log('gender:',gender)
-          // console.log(user_name,email,gender,qualification,birthday,status,desc)
-        })
-         
-        
-     })
+    //         }
+    //       })
+    //       //  console.log('gender:',gender)
+    //       // console.log(user_name,email,gender,qualification,birthday,status,desc)
+      
+    //  })
 
 
 
@@ -431,129 +439,190 @@
 
     //custom message 
     
-    $(".save").click(function(){
+    // $(".save").click(function(){
       
-      //radio button message
-        let radiobutton = $("input[name='gender']:checked").val();
+    //   radio button message
+    //     let radiobutton = $("input[name='gender']:checked").val();
         
-        if(!radiobutton){
-          document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
-          document.getElementById("check_radio").style.color="red";
+    //     if(!radiobutton){
+    //       document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
+    //       document.getElementById("check_radio").style.color="red";
           
-        }
+    //     }
 
-        //select dropdown
-        let selectdrop= $('#qualification').val();
-        // console.log(selectdrop)
-        if(selectdrop=='Open this select menu')
-        {
-          document.getElementById("select_dropdown").innerHTML="Opps!! You have forgot to select qualification";
-          document.getElementById("select_dropdown").style.color="red";
+    //     //select dropdown
+    //     let selectdrop= $('#qualification').val();
+    //     // console.log(selectdrop)
+    //     if(selectdrop=='Open this select menu')
+    //     {
+    //       document.getElementById("select_dropdown").innerHTML="Opps!! You have forgot to select qualification";
+    //       document.getElementById("select_dropdown").style.color="red";
           
           
-        }
+    //     }
           
-          //select date
-        let date = $('#birthday').val();
+    //       //select date
+    //     let date = $('#birthday').val();
      
-        if(date===""){
-          document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";
-          document.getElementById("message_birthday").style.color="red";
-        }
+    //     if(date===""){
+    //       document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";
+    //       document.getElementById("message_birthday").style.color="red";
+    //     }
 
       
 
 
-      })
+    //   })
 
-    $(function () {        
+    // $(function () {        
 
-        $("#modal_form").validate({
+    //     $("#modal_form").validate({
         
-            rules: {
-              name: {
-                      required: true,
-                      minlength: 3,
-                  },
+    //         rules: {
+    //           name: {
+    //                   required: true,
+    //                   minlength: 3,
+    //               },
 
-                  email:{
-                    required:true,
+    //               email:{
+    //                 required:true,
 
-                  },
-                  gender:{
-                    required:true
-                  },
+    //               },
+    //               gender:{
+    //                 required:true
+    //               },
 
-                  qualification:{
-                    required:true,
-                  },
+    //               qualification:{
+    //                 required:true,
+    //               },
 
-                  birthday:{
-                    required:true,
-                  },
+    //               birthday:{
+    //                 required:true,
+    //               },
 
-                  status:{
-                    required: true,
+    //               status:{
+    //                 required: true,
                   
-                },
-                  desc:{
-                      required: true,
-                      minlength: 10,
-                      maxlength: 1000,
-                      lettersonly: true 
-                  },
+    //             },
+    //               desc:{
+    //                   required: true,
+    //                   minlength: 10,
+    //                   maxlength: 1000,
+    //                   lettersonly: true,
+    //               },
             
-          },
-            messages: {
-                name: {
-                    required: "Please enter your name",
-                    minlength: "Your data must be at least 8 characters",
-                },
-                email:{
-                  required:"Please give your email",
-                  email:true,
+    //       },
+    //         messages: {
+    //             name: {
+    //                 required: "Please enter your name",
+    //                 minlength: "Your data must be at least 8 characters",
+    //             },
+    //             email:{
+    //               required:"Please give your email",
+    //               email:true,
 
-                },
-                gender:{
-                    required:"Select the radio button",
-                    gender:true,
-                },
-                qualification:{
-                    required:"Select your qualification",
-                    qualification:true,
-                },
-                birthday:{
-                  required:"Give your Date of birth",
-                  birthday:true,
-                },
-                status:{
-                  required:"Select if your are active user",
-                  status:true,
-                },
-                desc:{
-                  required:"Enter your message 3-20 characters",
-                  desc:true,
+    //             },
+    //             gender:{
+    //                 required:"Select the radio button",
+    //                 gender:true,
+    //             },
+    //             qualification:{
+    //                 required:"Select your qualification",
+    //                 qualification:true,
+    //             },
+    //             birthday:{
+    //               required:"Give your Date of birth",
+    //               birthday:true,
+    //             },
+    //             status:{
+    //               required:"Select if your are active user",
+    //               status:true,
+    //             },
+    //             desc:{
+    //               required:"Enter your message 10-1000 characters",
+    //               desc:true,
 
-                },
+    //             },
                 
-            },
-            errorElement: 'span',
-            errorClass: 'text-danger',
-            // errorPlacement: function(error, element) 
-            // {
-            //   let radiobutton = $("input[name='gender']:checked").val();
+    //         },
+    //         errorElement: 'span',
+    //         errorClass: 'text-danger',
+    //         // errorPlacement: function(error, element) 
+    //         // {
+    //         //   let radiobutton = $("input[name='gender']:checked").val();
 
 
-            //   if(!radiobutton){
-            //     document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
-            //     document.getElementById("check_radio").style.color="red";
+    //         //   if(!radiobutton){
+    //         //     document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";
+    //         //     document.getElementById("check_radio").style.color="red";
                 
-            //   }
-            // }
+    //         //   }
+    //         // }
           
-        });
-    });
+    //     });
+    // });
    
+  </script>
+
+  <script>
+          $('#modal_form').submit(function(e){
+            e.preventDefault()
+
+            var formData = new FormData($('#modal_form')[0]);
+
+            // let values = 
+          //  let formData = {
+          //     'user_name': $('#user_name').val(),
+          //     'email':  $('#email').val(),
+          //     'qualification':  $('#qualification').val(),
+          //     'birthday': $('#birthday').val() ,
+          //     'status': $('#status').val() ,
+          //     'desc': $('#desc').val() ,
+          //     'gender': $("input[type='radio'][name='gender']:checked").val(),
+          //  }
+// console.log(formData);
+// return;
+          // formdata.append('user_name',user_name);
+          // formdata.append('email',email);
+          // formdata.append('qualification',qualification);
+          // formdata.append('birthday',birthday);
+          // formdata.append('status',status);
+          // formdata.append('desc',desc);
+          // formdata.append('gender',gender);
+
+
+          $.ajax({
+            type:"POST",
+            dataType:"json",
+            url:"{{route('store_info')}}",
+            data: formData,
+          
+            // data:formdata,
+            contentType: false,
+            processData: false,
+
+            success:function(response){
+              if(response.status=='success'){
+                alert("Information saved successfully");
+                $('#exampleModal').hide();
+                location.reload();
+                // console.log(response.errors)
+
+
+              }
+            },
+            error:function(response){
+               
+                // alert("something went wrong");
+                console.log(response.responseJSON.errors.email);
+                $('#response_email').html(response.responseJSON.errors.email);
+               
+            }
+          })
+          //  console.log('gender:',gender)
+          // console.log(user_name,email,gender,qualification,birthday,status,desc)
+      
+     })
   </script>
 </body>
 </html>

@@ -110,7 +110,7 @@
             $('.submit').click(function () {
                 event.preventDefault();
                 let info_id = $('#info').val();
-               
+                
                 let image_upload = new FormData();
                 console.log($('.image-upload'));
                 let TotalImages = $('.image-upload').length;  //Total Images
@@ -126,7 +126,7 @@
                 $.ajax({
                     method: 'POST',
                     url: '/image-upload',
-                    data: image_upload:,
+                    data: image_upload,
                     contentType: false,
                     processData: false,
                     success: function (images) {
