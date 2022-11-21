@@ -161,8 +161,8 @@ class HomeController extends Controller
             'birthday'=>'required',
             // 'status'=>'required',
             'desc'=>'required',
-            'image_upload' => 'required',
-            'image_upload.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
+//            'image_upload' => 'required',
+//            'image_upload.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],
             [
                 'name.required'=>'User name is required',
@@ -170,7 +170,7 @@ class HomeController extends Controller
                 'gender.required'=>'Gender is required',
                 'qualification.required'=>'Qualification is required',
                 'birthday.required'=>'birth date is required',
-                'image_upload.required'=>'Please insert images',
+//                'image_upload.required'=>'Please insert images',
             ]
         );
 
