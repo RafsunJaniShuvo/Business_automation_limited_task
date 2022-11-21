@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\Information;
-
+use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -62,6 +62,7 @@ class HomeController extends Controller
 
 
 
+=
 
 
 
@@ -139,47 +140,90 @@ class HomeController extends Controller
 
 
 
-    public function edit_info($id)
-    {
-        $info =Information::find( $id);
-        return response()->json($info);
+    public function edit_info($id){
+
+//      $info =Information::find($id);
+//      $file = File::where('information_id','=',$id)->get();
+      $result = DB::table('information')->leftJoin('files','information.id','=','files.id')
+      ->where('files.id',$id)->where('information.id',$id)->first();
+    return response()->json($result);
+
     }
 
     public function update_info(Request $request,$id)
     {
 
-            $request->validate([
-            'user_name'=>'required',
+
+        $validator = $request->validate([
+            'name'=>'required',
             'email'=>'required|email',
             'gender'=>'required',
             'qualification'=>'required',
             'birthday'=>'required',
             // 'status'=>'required',
             'desc'=>'required',
+//            'image_upload' => 'required',
+//            'image_upload.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
         ],
-        [
-            'user_name.required'=>'User name is required',
-            'email.required'=>'Email is required!!',
-            'gender.required'=>'Gender is required',
-            'qualification.required'=>'Qualification is required',
-            'birthday.required'=>'Birthday is required',
-            'desc.required'=>'Short description is required',
+            [
+                'name.required'=>'User name is required',
+                'email.required'=>'Email has to be unique',
+                'gender.required'=>'Gender is required',
+                'qualification.required'=>'Qualification is required',
+                'birthday.required'=>'birth date is required',
+//                'image_upload.required'=>'Please insert images',
+            ]
+        );
 
-        ]);
+        try{
 
-        $info = Information::find($id);
-        $info->user_name=$request->user_name;
-        $info->email=$request->email;
-        $info->gender=$request->gender;
-        $info->qualification=$request->qualification;
-        $info->birthday=$request->birthday;
-        $info->status= $request->status;
-        $info->description=$request->desc;
+            DB::beginTransaction();
 
-        $info->update();
-        return response()->json([
-            'status'=>'success'
-        ]);
+            $info =  Information::find($id);
+
+            $info->user_name=$request->name;
+            $info->email=$request->email;
+            $info->gender=$request->gender;
+            $info->qualification=$request->qualification;
+            $info->birthday=$request->birthday;
+            if($request->status){
+                $info->status= $request->status;
+            }else{
+                $info->status= 0;
+            }
+            $info->description=$request->desc;
+            $info->update();
+
+
+            if ($request->hasFile('image_upload')) {
+
+                $images = $request->file('image_upload');
+                foreach ($images as $image) {
+                    $file = File::find($id);
+                    $imagesName = $image->getClientOriginalName();
+                    $ans= $image->move( public_path().'/images/test', $imagesName);
+                    $file->images = '/images/test/'.$imagesName;
+                    $file->information_id=$info->id;
+                    $file->update();
+
+                }
+
+            }
+
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'messages' => "Data updated Successfully"
+            ]);
+
+
+        }
+        catch(\Throwable $e){
+            DB::rollback();
+
+        }
     }
 
     public function delete_info($id)
