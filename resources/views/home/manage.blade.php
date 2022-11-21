@@ -58,16 +58,16 @@
               <table class="table "  id="myTable" >
                 <thead>
                   <tr>
-                    <th scope="col">Sl_No.</th>
+                    <th scope="col" width="5%">Sl_No.</th>
                     <th scope="col">User Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Gender</th>
                     <th scope="col">Qualification</th>
                     <th scope="col">Birthday</th>
                     <th scope="col">status</th>
-                    <th scope="col">description</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" width="20%">description</th>
+                    <th scope="col" width="10" >Image</th>
+                    <th scope="col" width="10%">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +90,7 @@
             <form action="#" id="modal_form" enctype="multipart/form-data">
               @csrf
 
-              <input type="number" id="id" >
+              <input type="number" id="id" hidden>
               <div class="row">
                 <div class="col-md-4">
                   <div class="mb-3">
@@ -202,6 +202,18 @@
     {{--  onkeyup method for jquery validation--}}
     <script>
 
+            //clean up modal
+            $('#exampleModal').on('hidden.bs.modal', function (e) {
+                $(this)
+                    .find("input,textarea,select")
+                    .val('')
+                    .end()
+                    .find("input[type=checkbox], input[type=radio]")
+                    .prop("checked", "")
+                    .end();
+            })
+
+
             // user name validation
              function name_validaion(){
 
@@ -300,7 +312,8 @@
 
 
    $(document).ready(function(){
-     $('#myTable').DataTable({
+
+    let ajaxtable = $('#myTable').DataTable({
       "processing":true,
       "serverSide":true,
       "ajax":"{{route('ajax.getData')}}",
@@ -692,9 +705,12 @@
             success:function(response){
               if(response.status=='success'){
                 alert("Information saved successfully");
-                $('#exampleModal').hide();
-                location.reload();
-                console.log(response.errors)
+                $('#exampleModal').modal('hide');
+
+                  // var oTable = $('#exampleModal').DataTable( );
+                  // oTable.ajax.reload();
+                  table.ajax.reload();
+
 
 
               }
