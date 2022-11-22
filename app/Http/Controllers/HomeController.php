@@ -143,9 +143,10 @@ class HomeController extends Controller
 
 //      $info =Information::find($id);
 //      $file = File::where('information_id','=',$id)->get();
-      $result = DB::table('information')->leftJoin('files','information.id','=','files.id')
-      ->where('files.id',$id)->where('information.id',$id)->first();
+      $result = DB::table('information')->Join('files','information.id','=','files.information_id')
+      ->where('files.information_id',$id)->where('information.id',$id)->first();
 
+//    dd($result);
     return response()->json($result);
 
     }
@@ -160,10 +161,9 @@ class HomeController extends Controller
             'gender'=>'required',
             'qualification'=>'required',
             'birthday'=>'required',
-            // 'status'=>'required',
+
             'desc'=>'required',
-//            'image_upload' => 'required',
-//            'image_upload.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048'
+
         ],
             [
                 'name.required'=>'User name is required',
@@ -171,7 +171,7 @@ class HomeController extends Controller
                 'gender.required'=>'Gender is required',
                 'qualification.required'=>'Qualification is required',
                 'birthday.required'=>'birth date is required',
-//                'image_upload.required'=>'Please insert images',
+
             ]
         );
 

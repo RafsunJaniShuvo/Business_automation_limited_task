@@ -59,7 +59,7 @@
               </div>
               <div class="alert alert-danger" style="display:none"></div>
               <div class="modal-body">
-                <form action="#" id="modal_form" enctype="multipart/form-data">
+                <form action="#" id="modal_form" class="modal_form" enctype="multipart/form-data">
                   @csrf
 
                   <input type="number" id="id" hidden>
@@ -67,7 +67,7 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="user_name" class="form-label required"> User Name</label>
-                        <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name" onkeyup=" name_validaion() ">
+                        <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name" >
                           <span id="response_name" style="color:red;"></span>
 
                         {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
@@ -79,7 +79,7 @@
 
     {{--                      pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}--}}
 
-                        <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  onkeyup="email_validation()">
+                        <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  >
                         <span id="response_email" style="color:red;"> </span>
 
                       </div>
@@ -87,9 +87,9 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <span>Gender</span><br>
-                          <input type="radio" id="gender" name="gender"  value="1" >
+                          <input type="radio" id="gender" class="gender_1" name="gender"  value="1" >
                          <label for="gender">Male</label><br>
-                         <input type="radio" id="gender" name="gender" value="0" >
+                         <input type="radio" id="gender" class="gender_0" name="gender" value="0" >
                           <label for="gender">Female</label><br>
                         <span id="response_gender" style="color:red;"></span>
                       </div>
@@ -147,7 +147,7 @@
                   <div class="row" >
                         <div class="col-md-12">
                           <label for="desc">Description</label>
-                          <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" onkeyup="desc_validation()"> </textarea>
+                          <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" > </textarea>
                             <span id="response_desc" style="color:red;"></span>
                         </div>
                   </div>
@@ -170,16 +170,144 @@
 {{--    jquery dataTables--}}
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 {{--    jquery validate--}}
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{--    jquery date picker--}}
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     {{--  onkeyup method for jquery validation--}}
     <script>
-        //date picker
-        $( function() {
-            $( "#birthday" ).datepicker();
-        } );
+        // jquery validate
+
+        $(document).ready(function () {
+
+
+                $("#modal_form").validate({
+
+                    rules: {
+                        name: {
+                            required: true,
+                            minlength: 3,
+
+                        },
+
+                        email:{
+                            required:true,
+                        },
+                        gender:{
+                            required:true,
+                        },
+
+                        qualification:{
+                            required:true,
+                        },
+
+                        birthday:{
+                            required:true,
+                        },
+
+                        status:{
+                            required: true,
+
+                        },
+                        desc:{
+                            required: true,
+                            minlength: 10,
+                            maxlength: 1000,
+
+                        }
+
+                    },
+                    messages: {
+                        name: {
+                            required: "Please enter your name",
+                            minlength: "Your data must be at least 3 characters",
+                        },
+                        email:{
+                            required:"Please give your email",
+                        },
+                        gender:{
+                            required:"Select the radio button",
+                        },
+                        qualification:{
+                            required:"Select your qualification",
+                        },
+                        birthday:{
+                            required:"Give your Date of birth",
+                        },
+                        status:{
+                            required:"Select if your are active user",
+                        },
+                        desc:{
+                            required:"Enter your message 10-1000 characters",
+                        },
+
+                    },
+                    submitHandler: function (form,event) { // for demo
+                        event.preventDefault();
+                        // alert('valid form submitted'); // for demo
+
+                        $('.modal_form').submit(function(e){
+                            e.preventDefault();
+
+
+                            var formData = new FormData($('.modal_form')[0]);
+
+
+                            $.ajax({
+                                type:"POST",
+                                // dataType:"json",
+                                url:"{{route('store_info')}}",
+                                data: formData,
+
+                                // data:formdata,
+                                contentType: false,
+                                processData: false,
+
+                                success:function(response){
+                                    if(response.status=='success'){
+                                        alert("Information saved successfully");
+                                        $('#exampleModal').modal('hide');
+                                        $('#myTable').DataTable().ajax.reload();
+
+                                    }
+                                },
+                                error:function(response){
+                                    console.log(response)
+                                    alert("something went wrong");
+                                    console.log(response.responseJSON.errors.email);
+
+                                    $('#response_email').html(response.responseJSON.errors.email);
+                                    $('#response_name').html(response.responseJSON.errors.user_name);
+                                    $('#response_gender').html(response.responseJSON.errors.gender);
+                                    $('#response_birthday').html(response.responseJSON.errors.birthday);
+                                    $('#response_desc').html(response.responseJSON.errors.desc);
+                                    $('#response_qualification').html(response.responseJSON.errors.qualification);
+                                    $('#response_image').html('');
+                                    $('#response_image').html(response.responseJSON.errors.image_upload);
+
+
+                                }
+                            })
+
+                        })
+
+
+
+
+
+                    }
+
+
+                });
+            });
+
+
+
+
+            //date picker
+            $( function() {
+                $( "#birthday" ).datepicker();
+            } );
 
 
             //clean up modal
@@ -194,95 +322,9 @@
             })
 
 
-            // user name validation
-             function name_validaion(){
-
-                    let user_name = $('#user_name').val();
-                    if(user_name.length<4){
-
-                        document.getElementById("response_name").innerHTML="Opps!! Name length should not be less than 3 characters.";
-                        document.getElementById("response_name").style.color="red";
-                    }else{
-                        $('#response_name').hide();
-                    }
-
-
-
-
-             }
-
-             // email validation
-
-            function email_validation(){
-                let email = $('#email').val();
-                    if(!email){
-                        document.getElementById("response_email").innerHTML="Opps!! Email can not be null!";
-                        console.log("Opps!! Email can not be null!");
-
-
-                    }else if(email.length<11){
-                        document.getElementById("response_email").innerHTML="Opps!! Give your valid email!";
-
-                    } else{
-                        $('#response_email').hide();
-                    }
-            }
-
-            function desc_validation(){
-                 let desc = $('#desc').val();
-                 if(!desc){
-                     document.getElementById("response_desc").innerHTML="Opps! You have forgot to give a short description";
-                 }else if(desc.length<11){
-                     document.getElementById('response_desc').innerHTML="Description minimum length should not be less than 10 characters";
-                 }else {
-                     $('#response_desc').hide();
-                 }
-            }
-
-            //gender validaiton
-            // $('.save').click(function(){
-            //          let radiobutton = $("input[name='gender']:checked").val();
-            //
-            //     if(!radiobutton) {
-            //
-            //         document.getElementById("check_radio").innerHTML = "OPPS !! You have forgot to select gender";
-            //         document.getElementById("check_radio").style.color = "red";
-            //     }else{
-            //         $('#check_radio').hide();
-            //     }
-            //
-            //
-            //     let selectdrop= $('#qualification').val();
-            //     // console.log(selectdrop)
-            //     if(selectdrop=='Open this select menu') {
-            //         document.getElementById("select_dropdown").innerHTML = "Opps!! You have forgot to select qualification";
-            //         document.getElementById("select_dropdown").style.color = "red";
-            //
-            //     }else{
-            //         $('#select_dropdown').hide();
-            //     }
-            //
-            //
-            //             let date = $('#birthday').val();
-            //
-            //             if(date===""){
-            //               document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";
-            //               document.getElementById("message_birthday").style.color="red";
-            //             }
-            //
-            // });
-
-
-
-
-
-
     </script>
 
     <script>
-
-
-
 
     $.ajaxSetup({
         headers: {
@@ -347,6 +389,9 @@
          },
         {"data":"actions",
           },
+
+
+
       ]
 
 
@@ -369,65 +414,7 @@
            </div>`);
         });
 
-     ///Save
 
-    //   $('#modal_form').submit(function(e){
-    //     e.preventDefault()
-
-
-
-    //       let user_name=$('#user_name').val();
-    //       let email= $('#email').val();
-    //       let qualification= $('#qualification').val();
-    //       let birthday=$('#birthday').val() ;
-    //       let status=$('#status').val() ;
-    //       let desc=$('#desc').val() ;
-    //       let gender=$("input[type='radio'][name='gender']:checked");
-    //       if(gender.length>0){
-    //         gender=gender.val();
-    //       }
-
-    //       // formdata.append('user_name',user_name);
-    //       // formdata.append('email',email);
-    //       // formdata.append('qualification',qualification);
-    //       // formdata.append('birthday',birthday);
-    //       // formdata.append('status',status);
-    //       // formdata.append('desc',desc);
-    //       // formdata.append('gender',gender);
-
-
-    //       $.ajax({
-    //         type:"POST",
-    //         dataType:"json",
-    //         url:"{{route('store_info')}}",
-    //         data:{user_name:user_name,email:email,qualification:qualification,birthday:birthday,status:status,desc:desc,gender:gender},
-
-    //         // data:formdata,
-    //         contentType: false,
-    //         processData: false,
-
-    //         success:function(response){
-    //           if(response.status=='success'){
-    //             alert("Information saved successfully");
-    //             $('#exampleModal').hide();
-    //             location.reload();
-    //             // console.log(response.errors)
-
-
-    //           }
-    //         },
-    //         error:function(response){
-
-    //             // alert("something went wrong");
-    //             console.log(response.responseJSON.errors.email);
-    //             $('#response_email').html(response.responseJSON.errors.email);
-
-    //         }
-    //       })
-    //       //  console.log('gender:',gender)
-    //       // console.log(user_name,email,gender,qualification,birthday,status,desc)
-
-    //  })
 
 
 
@@ -447,9 +434,16 @@
           $('#desc').val(response.description);
           $('#qualification').val(response.qualification);
           $('#birthday').val(response.birthday);
-          $("#gender[value='" + response.gender + "']").prop('checked', true); //most important and challenging
-          $("#status[value='" + response.status + "']").prop('checked', true); //most important and challenging
+          // console.log('#gender[value="' + response.gender + '"]');
 
+          // $('#gender[value="' + response.gender + '"]').attr('checked', true); //most important and challenging
+          // $("#status[value='" + response.status + "']").attr('checked', true); //most important and challenging
+            //
+            $('input[name^="gender"][value="'+response.gender+'"').attr('checked',true);
+            // $('.gender_' + response.gender ).attr('checked', true); //most important and challenging
+          $("#status[value='" + response.status + "']").attr('checked', true); //most important and challenging
+
+            $('#img_id').html('');
             $('#img_id').html('<img width="50px" src="' + response.images + '" />');
 
           $('.save').hide();
@@ -538,180 +532,6 @@
 
   </script>
 
-{{--  <script>--}}
-
-{{--    custom message--}}
-
-{{--    $(".save").click(function(){--}}
-
-{{--        let radiobutton = $("input[name='gender']:checked").val();--}}
-{{--      console.log(radiobutton);--}}
-{{--        if(!radiobutton){--}}
-{{--          document.getElementById("check_radio").innerHTML="OPPS !! You have forgot to select gender";--}}
-{{--          document.getElementById("check_radio").style.color="red";--}}
-
-{{--        }--}}
-
-{{--        //select dropdown--}}
-{{--        let selectdrop= $('#qualification').val();--}}
-{{--        // console.log(selectdrop)--}}
-{{--        if(selectdrop=='Open this select menu')--}}
-{{--        {--}}
-{{--          document.getElementById("select_dropdown").innerHTML="Opps!! You have forgot to select qualification";--}}
-{{--          document.getElementById("select_dropdown").style.color="red";--}}
-
-
-{{--        }--}}
-
-{{--          //select date--}}
-{{--        let date = $('#birthday').val();--}}
-
-{{--        if(date===""){--}}
-{{--          document.getElementById("message_birthday").innerHTML="Opps!! You have forgot to select birthday";--}}
-{{--          document.getElementById("message_birthday").style.color="red";--}}
-{{--        }--}}
-
-
-
-
-{{--      })--}}
-
-
-{{--    jquery validation--}}
-{{--    $(function () {--}}
-{{--    $('#modal_form').on('keyup  ',function(){--}}
-
-
-{{--        $(this).validate({--}}
-
-{{--            rules: {--}}
-{{--              name: {--}}
-{{--                      required: true,--}}
-{{--                      minlength: 8,--}}
-{{--                        onkeyup: true,--}}
-{{--                  },--}}
-
-{{--                  email:{--}}
-{{--                    required:true,--}}
-{{--                      onkeyup: true,--}}
-
-
-{{--                  },--}}
-{{--                  gender:{--}}
-{{--                    required:true,--}}
-{{--                      onkeyup: true,--}}
-{{--                  },--}}
-
-{{--                  qualification:{--}}
-{{--                    required:true,--}}
-{{--                  },--}}
-
-{{--                  birthday:{--}}
-{{--                    required:true,--}}
-{{--                  },--}}
-
-{{--                  status:{--}}
-{{--                    required: true,--}}
-
-{{--                },--}}
-{{--                  desc:{--}}
-{{--                      required: true,--}}
-{{--                      minlength: 10,--}}
-{{--                      maxlength: 1000,--}}
-{{--                      lettersonly: true,--}}
-{{--                  },--}}
-
-{{--          },--}}
-{{--            messages: {--}}
-{{--                name: {--}}
-{{--                    required: "Please enter your name",--}}
-{{--                    minlength: "Your data must be at least 8 characters",--}}
-{{--                },--}}
-{{--                email:{--}}
-{{--                  required:"Please give your email",--}}
-
-
-{{--                },--}}
-{{--                gender:{--}}
-{{--                    required:"Select the radio button",--}}
-
-{{--                },--}}
-{{--                qualification:{--}}
-{{--                    required:"Select your qualification",--}}
-
-{{--                },--}}
-{{--                birthday:{--}}
-{{--                  required:"Give your Date of birth",--}}
-
-{{--                },--}}
-{{--                status:{--}}
-{{--                  required:"Select if your are active user",--}}
-
-{{--                },--}}
-{{--                desc:{--}}
-{{--                  required:"Enter your message 10-1000 characters",--}}
-
-
-{{--                },--}}
-
-{{--            },--}}
-{{--            errorElement: 'span',--}}
-{{--            errorClass: 'text-danger',--}}
-
-
-{{--        });--}}
-{{--    });--}}
-
-{{--    })--}}
-
-{{--  </script>--}}
-
-  <script>
-          $('#modal_form').submit(function(e){
-            e.preventDefault()
-
-            var formData = new FormData($('#modal_form')[0]);
-
-          $.ajax({
-            type:"POST",
-            dataType:"json",
-            url:"{{route('store_info')}}",
-            data: formData,
-
-            // data:formdata,
-            contentType: false,
-            processData: false,
-
-            success:function(response){
-              if(response.status=='success'){
-                alert("Information saved successfully");
-                $('#exampleModal').modal('hide');
-
-
-
-
-
-              }
-            },
-            error:function(response){
-                console.log(response)
-                alert("something went wrong");
-                console.log(response.responseJSON.errors.email);
-
-                $('#response_email').html(response.responseJSON.errors.email);
-                $('#response_name').html(response.responseJSON.errors.user_name);
-                $('#response_gender').html(response.responseJSON.errors.gender);
-                $('#response_birthday').html(response.responseJSON.errors.birthday);
-                $('#response_desc').html(response.responseJSON.errors.desc);
-                $('#response_qualification').html(response.responseJSON.errors.qualification);
-                $('#response_image').html(response.responseJSON.errors.image_upload);
-
-
-            }
-          })
-
-     })
-  </script>
 
 
 </body>
