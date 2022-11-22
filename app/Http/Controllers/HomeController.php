@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\Information;
-
+use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -79,6 +79,28 @@ class HomeController extends Controller
                  'image_upload.required'=>'Please insert images',
              ]
          );
+
+
+
+
+    // $validator = $request->validate([
+    //             'user_name'=>'required',
+    //             'email'=>'required|email|unique:information',
+    //             'gender'=>'required',
+    //             'qualification'=>'required',
+    //             'birthday'=>'required',
+    //             // 'status'=>'required',
+    //             'desc'=>'required',
+    //         ],
+    //         [
+    //             'user_name.required'=>'User name is required',
+    //             'email.required'=>'Email has to be unique',
+    //             'gender.required'=>'Gender is required',
+    //             'qualification.required'=>'Qualification is required',
+    //             'birthday.required'=>'birth date is required',
+    //         ]
+    //     );
+
 
         try{
 
