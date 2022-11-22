@@ -59,9 +59,6 @@ class HomeController extends Controller
     public function store_info(Request $request)
     {
 
-
-
-
      $validator = $request->validate([
                  'name'=>'required',
                  'email'=>'required|email|unique:information',
@@ -88,19 +85,22 @@ class HomeController extends Controller
             DB::beginTransaction();
 
             $info = new Information();
-
             $info->user_name=$request->name;
             $info->email=$request->email;
             $info->gender=$request->gender;
             $info->qualification=$request->qualification;
             $info->birthday=$request->birthday;
+
             if($request->status){
                 $info->status= $request->status;
             }else{
                 $info->status= 0;
             }
+
             $info->description=$request->desc;
+
             $info->save();
+
 
 
             if ($request->hasFile('image_upload')) {
@@ -145,6 +145,7 @@ class HomeController extends Controller
 //      $file = File::where('information_id','=',$id)->get();
       $result = DB::table('information')->leftJoin('files','information.id','=','files.id')
       ->where('files.id',$id)->where('information.id',$id)->first();
+
     return response()->json($result);
 
     }

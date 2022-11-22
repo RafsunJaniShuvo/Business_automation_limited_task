@@ -1,59 +1,31 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Manage Table</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <style>
-       textarea.error{ border: 1px solid #FF0000 !important;}
-      body
-        {
-          font-family: Arial, Sans-serif;
-        }
-        .error
-        {
-        color:red;
-        font-family:verdana, Helvetica;
-        }
-    </style>
-
-  </head>
+@extends('layout.app')
+@section('main')
   <body>
-    <div class="container mt-5">
+    <div class="container ">
+        <div class="card">
+            <div class="d-flex justify-content-between bd-highlight mt-3">
+                <div>
+                  <a href="{{route('dashboard')}}" class="btn btn-success mx-2" >
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back
+                  </a>
+                </div>
 
-      <div class="d-flex justify-content-between bd-highlight">
-        <div>
-          <a href="{{route('dashboard')}}" class="btn btn-success" >
-            <i class="fa-solid fa-arrow-left"></i>
-            Back
-          </a>
-        </div>
+                <div >
+                  <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-solid fa-plus"></i>
+                    Add info
+                  </button>
 
-        <div>
-          <button type="button" class="btn btn-primary mb-2 addinfo" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i class="fa-solid fa-plus"></i>
-            Add info
-          </button>
+                  <a href="{{url('/image')}}" class="btn btn-primary mb-2 addinfo" style="margin-right: 20px;">
+                    <i class="fa-solid fa-plus"></i>
+                    Images
+                  </a>
+                </div>
 
-          <a href="{{url('/image')}}" class="btn btn-primary mb-2 addinfo" style="margin-right: 20px;">
-            <i class="fa-solid fa-plus"></i>
-            Images
-          </a>
+            </div>
 
-
-        </div>
-
-      </div>
-
-
-
-
-      <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center">
         <div class="col-md-12 mx-auto">
               <table class="table "  id="myTable" >
                 <thead>
@@ -65,9 +37,9 @@
                     <th scope="col">Qualification</th>
                     <th scope="col">Birthday</th>
                     <th scope="col">status</th>
-                    <th scope="col" width="20%">description</th>
-                    <th scope="col" width="10" >Image</th>
-                    <th scope="col" width="10%">Action</th>
+                    <th scope="col" width="10%">description</th>
+                    <th scope="col" width="10%" >Image</th>
+                    <th scope="col" width="15%">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -78,129 +50,137 @@
       </div>
 
       <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Information</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header bg-success text-white">
+                <h5 class="modal-title " id="exampleModalLabel" >Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="alert alert-danger" style="display:none"></div>
+              <div class="modal-body">
+                <form action="#" id="modal_form" enctype="multipart/form-data">
+                  @csrf
+
+                  <input type="number" id="id" hidden>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="user_name" class="form-label required"> User Name</label>
+                        <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name" onkeyup=" name_validaion() ">
+                          <span id="response_name" style="color:red;"></span>
+
+                        {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+
+    {{--                      pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}--}}
+
+                        <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  onkeyup="email_validation()">
+                        <span id="response_email" style="color:red;"> </span>
+
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <span>Gender</span><br>
+                          <input type="radio" id="gender" name="gender"  value="1" >
+                         <label for="gender">Male</label><br>
+                         <input type="radio" id="gender" name="gender" value="0" >
+                          <label for="gender">Female</label><br>
+                        <span id="response_gender" style="color:red;"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
+                        <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" >
+                          <option value="">Open this select menu</option>
+                          <option value="0">B.Sc</option>
+                          <option value="1">H.Sc</option>
+                          <option value="2">S.Sc</option>
+                        </select>
+                        <span id="response_qualification" style="color:red;"></span>
+
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                          <div class="mb-3">
+                                <label for="birthday" class="form-label">Birthday</label>
+                                  <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Birthday" >
+                                <span id="response_birthday" style="color:red;"></span>
+                          </div>
+
+                    </div>
+                    <div class="col-md-4">
+                          <div class="my-3">
+                                <input type="checkbox" name="status" id="status" value="1">
+                                <label for="status" class="form-label">is_active?</label>
+
+                          </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row" id="addimage">
+
+                        <div class="col-md-4">
+
+                            <input class="form-control image-upload" type="file"  value="" name="image_upload[]" accept="image/png, image/jpg, image/jpeg, image/gif" enctype="multipart/form-data" >
+                            <p id="img_msg"></p>
+                            <div  id="img_id"> </div>
+                        </div>
+
+                        <div class="col-md-5">
+                          <button type="button" class="btn btn-success addMore" > + </button>
+                        </div>
+                        <span id="response_image" style="color:red"></span>
+
+                  </div>
+
+
+                  <div class="row" >
+                        <div class="col-md-12">
+                          <label for="desc">Description</label>
+                          <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" onkeyup="desc_validation()"> </textarea>
+                            <span id="response_desc" style="color:red;"></span>
+                        </div>
+                  </div>
+                  </div>
+                      <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary save">Save</button>
+                            <button type="button" class="btn btn-primary update">Update</button>
+                      </div>
+                </div>
+              </form>
           </div>
-          <div class="alert alert-danger" style="display:none"></div>
-          <div class="modal-body">
-            <form action="#" id="modal_form" enctype="multipart/form-data">
-              @csrf
 
-              <input type="number" id="id" hidden>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <label for="user_name" class="form-label required"> User Name</label>
-                    <input type="text" class="form-control" id="user_name" name="name" placeholder="User Name" onkeyup=" name_validaion() ">
-                      <span id="response_name" style="color:red;"></span>
-
-                    {{-- {!! $errors->first('user_name','<span class="help-block">:message</span>') !!} --}}
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-
-{{--                      pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}--}}
-
-                    <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  onkeyup="email_validation()">
-                    <span id="response_email" style="color:red;"> </span>
-
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <span>Gender</span><br>
-                      <input type="radio" id="gender" name="gender"  value="1" >
-                     <label for="gender">Male</label><br>
-                     <input type="radio" id="gender" name="gender" value="0" >
-                      <label for="gender">Female</label><br>
-                    <span id="response_gender" style="color:red;"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Qualifications</label>
-                    <select class="form-select" aria-label="Default select example" id="qualification" name="qualification" >
-                      <option value="">Open this select menu</option>
-                      <option value="0">B.Sc</option>
-                      <option value="1">H.Sc</option>
-                      <option value="2">S.Sc</option>
-                    </select>
-                    <span id="response_qualification" style="color:red;"></span>
-
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <label for="birthday" class="form-label">Birthday
-                        <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" >
-                    </label>
-                    <span id="response_birthday" style="color:red;"></span>
-                  </div>
-
-                </div>
-                <div class="col-md-4">
-                  <div class="my-3">
-                      <input type="checkbox" name="status" id="status" value="1">
-                    <label for="status" class="form-label">is_active?</label>
-
-
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="row" id="addimage">
-
-                <div class="col-md-4">
-
-                    <input class="form-control image-upload" type="file"  value="" name="image_upload[]" accept="image/png, image/jpg, image/jpeg, image/gif" enctype="multipart/form-data" >
-                    <p id="img_msg"></p>
-                    <div  id="img_id"> </div>
-                </div>
-                <div class="col-md-5">
-                  <button type="button" class="btn btn-success addMore" > + </button>
-                </div>
-                  <span id="response_image" style="color:red"></span>
-
-              </div>
-
-
-              <div class="row" >
-                <div class="col-md-12">
-                  <label for="desc">Description</label>
-                  <textarea  class="form-control" type="text" id="desc" name="desc" placeholder="Leave a short descrition" onkeyup="desc_validation()"> </textarea>
-                    <span id="response_desc" style="color:red;"></span>
-                </div>
-
-              </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary save">Save</button>
-                <button type="button" class="btn btn-primary update">Update</button>
-              </div>
-            </div>
-          </form>
-      </div>
-
-    </div>
+        </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+{{--    jquery dataTables--}}
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+{{--    jquery validate--}}
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+{{--    jquery date picker--}}
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     {{--  onkeyup method for jquery validation--}}
     <script>
+        //date picker
+        $( function() {
+            $( "#birthday" ).datepicker();
+        } );
+
 
             //clean up modal
             $('#exampleModal').on('hidden.bs.modal', function (e) {
@@ -707,9 +687,7 @@
                 alert("Information saved successfully");
                 $('#exampleModal').modal('hide');
 
-                  // var oTable = $('#exampleModal').DataTable( );
-                  // oTable.ajax.reload();
-                  table.ajax.reload();
+
 
 
 
@@ -737,4 +715,5 @@
 
 
 </body>
+  @endsection
 </html>
