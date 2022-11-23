@@ -250,8 +250,22 @@ class HomeController extends Controller
 
     public function delete_info($id)
     {
-        $info = Information::find($id);
-        $info->delete();
+
+        try {
+
+            DB::beginTransaction();
+
+
+            $info = Information::find($id);
+
+            $info->delete();
+
+            DB::commit();
+
+        }catch(\Throwable $e){
+            DB::rollback();
+
+        }
         return response()->json([
             'status'=>'success'
         ]);

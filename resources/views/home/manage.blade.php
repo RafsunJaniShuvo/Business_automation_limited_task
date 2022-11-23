@@ -1,8 +1,15 @@
 @extends('layout.app')
 @section('main')
   <body>
-    <div class="container ">
+    <div class="container mt-0">
         <div class="card">
+
+            <div class="card-header bg-success text-white " align="center">
+                User Information Table
+            </div>
+
+
+
             <div class="d-flex justify-content-between bd-highlight mt-3">
                 <div>
                   <a href="{{route('dashboard')}}" class="btn btn-success mx-2" >
@@ -77,19 +84,19 @@
                       <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
 
-    {{--                      pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}--}}
+{{--                          pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}--}}
 
-                        <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  >
+                        <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com"  pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" >
                         <span id="response_email" style="color:red;"> </span>
 
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="mb-3">
-                        <span>Gender</span><br>
-                          <input type="radio" id="gender" class="gender_1" name="gender"  value="1" >
+                        <span id="Gender">Gender</span><br>
+                          <input type="radio" class="gender" name="gender"  value="1" >
                          <label for="gender">Male</label><br>
-                         <input type="radio" id="gender" class="gender_0" name="gender" value="0" >
+                         <input type="radio" class="gender" name="gender" value="0" >
                           <label for="gender">Female</label><br>
                         <span id="response_gender" style="color:red;"></span>
                       </div>
@@ -119,7 +126,7 @@
                     </div>
                     <div class="col-md-4">
                           <div class="my-3">
-                                <input type="checkbox" name="status" id="status" value="1">
+                                <input type="checkbox" name="status"  id="status" value="1">
                                 <label for="status" class="form-label">is_active?</label>
 
                           </div>
@@ -311,15 +318,17 @@
 
 
             //clean up modal
-            $('#exampleModal').on('hidden.bs.modal', function (e) {
-                $(this)
-                    .find("input,textarea,select")
-                    .val('')
-                    .end()
-                    .find("input[type=checkbox], input[type=radio]")
-                    .prop("checked", "")
-                    .end();
-            })
+            // $('#exampleModal').on('hidden.bs.modal', function (e) {
+            //     $(this)
+            //         .find("input,textarea,select,input[type=checkbox],input[type=radio")
+            //         .val('')
+            //         .prop("checked", "checked")
+            //         .end()
+            //         // .find("input[type=checkbox], input[type=radio]")
+            //         // .val('')
+            //         // .prop("checked", "checked")
+            //         // .end();
+            // })
 
 
     </script>
@@ -416,8 +425,6 @@
 
 
 
-
-
      ///Edit button
      $(document).on('click','.editbutton',function(){
       var product_id = $(this).data('id');
@@ -438,10 +445,13 @@
 
           // $('#gender[value="' + response.gender + '"]').attr('checked', true); //most important and challenging
           // $("#status[value='" + response.status + "']").attr('checked', true); //most important and challenging
-            //
-            $('input[name^="gender"][value="'+response.gender+'"').attr('checked',true);
-            // $('.gender_' + response.gender ).attr('checked', true); //most important and challenging
-          $("#status[value='" + response.status + "']").attr('checked', true); //most important and challenging
+
+
+           $(document.body).find('.gender[value="' + response.gender + '"]').prop('checked', true);
+
+           $(document.body).find('#status[value="' + response.status + '"]').prop('checked', true);
+
+
 
             $('#img_id').html('');
             $('#img_id').html('<img width="50px" src="' + response.images + '" />');
