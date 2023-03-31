@@ -24,32 +24,23 @@ class HomeController extends Controller
     {
 
         if($request->ajax()){
-
             $query = DB::table('information')
             ->leftJoin('files','files.information_id','=','information.id')->get();
 
             return Datatables::of($query)
-
             ->addColumn('image',function($image){
-
                 $url = asset('/images/test'.$image->images);
-
                 return '<img src="'.$url.'" style="width:80px;" class="img-fluid" align="center" />';
             })
             ->addColumn('actions', function($row){
-
-
                 $btn =' <button type="button" class="btn btn-success editbutton" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#exampleModal" >
                 <i class="fa-solid fa-pen-to-square"></i>
                 </button>';
-
                 $btn = $btn.' <a href="#" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger deletebutton"><i class="fa-solid fa-trash"></i></a>';
-
                     return $btn;
             })
             ->rawColumns(['image','actions'])
             ->make(true);
-
         }
         return false;
 
@@ -58,13 +49,12 @@ class HomeController extends Controller
     //store info
     public function store_info(Request $request)
     {
-
      $validator = $request->validate([
                  'name'=>'required',
                  'email'=>'required|email|unique:information',
                  'gender'=>'required',
                  'qualification'=>'required',
-                 'birthday'=>'required',
+//                 'birthday'=>'required',
                  // 'status'=>'required',
                  'desc'=>'required',
                  'image_upload' => 'required',
@@ -75,74 +65,37 @@ class HomeController extends Controller
                  'email.required'=>'Email has to be unique',
                  'gender.required'=>'Gender is required',
                  'qualification.required'=>'Qualification is required',
-                 'birthday.required'=>'birth date is required',
+//                 'birthday.required'=>'birth date is required',
                  'image_upload.required'=>'Please insert images',
              ]
          );
-
-
-
-
-    // $validator = $request->validate([
-    //             'user_name'=>'required',
-    //             'email'=>'required|email|unique:information',
-    //             'gender'=>'required',
-    //             'qualification'=>'required',
-    //             'birthday'=>'required',
-    //             // 'status'=>'required',
-    //             'desc'=>'required',
-    //         ],
-    //         [
-    //             'user_name.required'=>'User name is required',
-    //             'email.required'=>'Email has to be unique',
-    //             'gender.required'=>'Gender is required',
-    //             'qualification.required'=>'Qualification is required',
-    //             'birthday.required'=>'birth date is required',
-    //         ]
-    //     );
-
-
         try{
-
             DB::beginTransaction();
-
             $info = new Information();
-            $info->user_name=$request->name;
-            $info->email=$request->email;
-            $info->gender=$request->gender;
-            $info->qualification=$request->qualification;
-            $info->birthday=$request->birthday;
-
+            $info->user_name =$request->name;
+            $info->email =$request->email;
+            $info->gender =$request->gender;
+            $info->qualification =$request->qualification;
+            $info->birthday =date('Y-m-d', strtotime($request->birthday)) ?? '';
             if($request->status){
-                $info->status= $request->status;
+                $info->status = $request->status;
             }else{
-                $info->status= 0;
+                $info->status = 0;
             }
-
-            $info->description=$request->desc;
-
+            $info->description = $request->desc;
             $info->save();
-
-
-
             if ($request->hasFile('image_upload')) {
                 $images = $request->file('image_upload');
                 foreach ($images as $image) {
                     $file = new File();
-
                     $imagesName = $image->getClientOriginalName();
                     $ans= $image->move( public_path().'/images/test', $imagesName);
                     $file->images = '/images/test/'.$imagesName;
                     $file->information_id=$info->id;
                     $file->save();
-
                 }
-
             }
-
-
             DB::commit();
-
             return response()->json([
                 'status' => 'success',
                 'messages' => "Data saved Successfully"
@@ -150,9 +103,9 @@ class HomeController extends Controller
 
 
         }
-        catch(\Throwable $e){
+        catch(\Exception $e){
+            dd('File: '.$e->getFile().'Line: '.$e->getLine().'Message :'.$e->getMessage());
             DB::rollback();
-
         }
 
     }
@@ -227,7 +180,6 @@ class HomeController extends Controller
                     $file->images = '/images/test/'.$imagesName;
                     $file->information_id=$info->id;
                     $file->update();
-
                 }
 
             }
@@ -250,21 +202,14 @@ class HomeController extends Controller
 
     public function delete_info($id)
     {
-
         try {
-
             DB::beginTransaction();
-
-
             $info = Information::find($id);
-
             $info->delete();
-
             DB::commit();
 
         }catch(\Throwable $e){
             DB::rollback();
-
         }
         return response()->json([
             'status'=>'success'
