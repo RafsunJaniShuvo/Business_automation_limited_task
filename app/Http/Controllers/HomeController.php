@@ -128,8 +128,6 @@ class HomeController extends Controller
 
     public function update_info(Request $request,$id)
     {
-
-
         $validator = $request->validate([
             'name'=>'required',
             'email'=>'required|email',
@@ -149,7 +147,6 @@ class HomeController extends Controller
 
             ]
         );
-
         try{
 
             DB::beginTransaction();
@@ -194,9 +191,8 @@ class HomeController extends Controller
 
 
         }
-        catch(\Throwable $e){
+        catch(\Exception $e){
             DB::rollback();
-
         }
     }
 
@@ -208,7 +204,7 @@ class HomeController extends Controller
             $info->delete();
             DB::commit();
 
-        }catch(\Throwable $e){
+        }catch(\Exception $e){
             DB::rollback();
         }
         return response()->json([
