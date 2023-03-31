@@ -33,8 +33,8 @@
             </div>
 
                 <div class="row d-flex justify-content-center">
-        <div class="col-md-12 mx-auto">
-              <table class="table "  id="myTable" >
+        <div class="col-md-12 col-lg-12 mx-auto table-responsive">
+              <table class="table"  id="myTable" >
                 <thead>
                   <tr>
                     <th scope="col" width="5%">Sl_No.</th>
@@ -68,7 +68,6 @@
               <div class="modal-body">
                 <form action="#" id="modal_form" class="modal_form" enctype="multipart/form-data">
                   @csrf
-
                   <input type="number" id="id" hidden>
                   <div class="row">
                     <div class="col-md-4">
@@ -149,8 +148,6 @@
                         <span id="response_image" style="color:red"></span>
 
                   </div>
-
-
                   <div class="row" >
                         <div class="col-md-12">
                           <label for="desc">Description</label>
@@ -186,17 +183,12 @@
         // jquery validate
 
         $(document).ready(function () {
-
-
                 $("#modal_form").validate({
-
                     rules: {
                         name: {
                             required: true,
                             minlength: 3,
-
                         },
-
                         email:{
                             required:true,
                         },
@@ -220,7 +212,6 @@
                             required: true,
                             minlength: 10,
                             maxlength: 1000,
-
                         }
 
                     },
@@ -255,11 +246,7 @@
 
                         $('.modal_form').submit(function(e){
                             e.preventDefault();
-
-
                             var formData = new FormData($('.modal_form')[0]);
-
-
                             $.ajax({
                                 type:"POST",
                                 // dataType:"json",
@@ -281,7 +268,6 @@
                                 error:function(response){
                                     console.log(response)
                                     alert("something went wrong");
-                                    console.log(response.responseJSON.errors.email);
 
                                     $('#response_email').html(response.responseJSON.errors.email);
                                     $('#response_name').html(response.responseJSON.errors.user_name);
