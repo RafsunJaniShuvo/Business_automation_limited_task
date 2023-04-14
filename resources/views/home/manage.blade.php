@@ -116,13 +116,11 @@
                           <div class="my-3">
                                 <input type="checkbox" name="status"  id="status" value="1">
                                 <label for="status" class="form-label">is_active?</label>
-
                           </div>
                         </div>
                       </div>
                       <div class="row" id="addimage">
                         <div class="col-md-4">
-
                             <input class="form-control image-upload" type="file"  value="" name="image_upload[]" accept="image/png, image/jpg, image/jpeg, image/gif" enctype="multipart/form-data" >
                             <p id="img_msg"></p>
                             <div  id="img_id"> </div>
@@ -299,7 +297,6 @@
             {"data":null,
               render:function(data,type,row)
               {
-
                 return data.gender == '0' ? 'Female' : 'Male';
               }
             },
@@ -340,7 +337,6 @@
             {
                 "data":"actions",
             },
-
           ]
          });
          //hide update button normally
@@ -367,7 +363,6 @@
             dataType:"json",
             url: '/edit-data/' + product_id,
             success:function(response){
-
               $('#id').val(response.id);
               $('#user_name').val(response.user_name);
               $('#email').val(response.email);
@@ -375,17 +370,12 @@
               $('#qualification').val(response.qualification);
               $('#birthday').val(response.birthday);
               // console.log('#gender[value="' + response.gender + '"]');
-
               // $('#gender[value="' + response.gender + '"]').attr('checked', true); //most important and challenging
               // $("#status[value='" + response.status + "']").attr('checked', true); //most important and challenging
-
                $(document.body).find('.gender[value="' + response.gender + '"]').prop('checked', true);
-
                $(document.body).find('#status[value="' + response.status + '"]').prop('checked', true);
-
                 $('#img_id').html('');
                 $('#img_id').html('<img width="50px" src="' + response.images + '" />');
-
               $('.save').hide();
               $('.update').show();
             },error:function(respnse){

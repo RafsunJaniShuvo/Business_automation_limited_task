@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\AddRowController;
 use App\Http\Middleware\CustomAuth;
 
 use App\Http\Controllers\Auth\CustomAuthController;
@@ -34,7 +36,9 @@ Route::middleware([CustomAuth::class])->group(function () {
     Route::get('/step_1',[stepperController::class,'create'])->name('stepper');
     Route::get('/step_2',[stepperController::class,'create_2'])->name('stepper_2');
 
-
+    //add row
+    Route::get('/addrow',[AddRowController::class,'create']);
+    Route::post('dynamic/addrow',[AddRowController::class,'addrow']);
 
 });
 
