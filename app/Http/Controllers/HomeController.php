@@ -110,19 +110,15 @@ class HomeController extends Controller
 
     }
 
-
-
-
-
     public function edit_info($id){
 
-//      $info =Information::find($id);
-//      $file = File::where('information_id','=',$id)->get();
-      $result = DB::table('information')->Join('files','information.id','=','files.information_id')
-      ->where('files.information_id',$id)->where('information.id',$id)->first();
+      $result = DB::table('information')
+          ->leftJoin('files','information.id','=','files.information_id')
+          ->where('files.information_id',$id)
+          ->where('information.id',$id)
+          ->first();
 
-//    dd($result);
-    return response()->json($result);
+      return response()->json($result);
 
     }
 
@@ -134,25 +130,19 @@ class HomeController extends Controller
             'gender'=>'required',
             'qualification'=>'required',
             'birthday'=>'required',
-
             'desc'=>'required',
-
         ],
-            [
-                'name.required'=>'User name is required',
-                'email.required'=>'Email has to be unique',
-                'gender.required'=>'Gender is required',
-                'qualification.required'=>'Qualification is required',
-                'birthday.required'=>'birth date is required',
-
-            ]
+        [
+            'name.required'=>'User name is required',
+            'email.required'=>'Email has to be unique',
+            'gender.required'=>'Gender is required',
+            'qualification.required'=>'Qualification is required',
+            'birthday.required'=>'birth date is required',
+        ]
         );
         try{
-
             DB::beginTransaction();
-
             $info =  Information::find($id);
-
             $info->user_name=$request->name;
             $info->email=$request->email;
             $info->gender=$request->gender;
@@ -165,10 +155,7 @@ class HomeController extends Controller
             }
             $info->description=$request->desc;
             $info->update();
-
-
             if ($request->hasFile('image_upload')) {
-
                 $images = $request->file('image_upload');
                 foreach ($images as $image) {
                     $file = File::find($id);
@@ -178,18 +165,12 @@ class HomeController extends Controller
                     $file->information_id=$info->id;
                     $file->update();
                 }
-
             }
-
-
             DB::commit();
-
             return response()->json([
                 'status' => 'success',
                 'messages' => "Data updated Successfully"
             ]);
-
-
         }
         catch(\Exception $e){
             DB::rollback();
