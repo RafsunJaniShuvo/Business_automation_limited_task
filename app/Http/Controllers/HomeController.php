@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Information;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -191,6 +193,31 @@ class HomeController extends Controller
         return response()->json([
             'status'=>'success'
         ]);
+    }
+
+    public function getDataIntoRedis(){
+
+
+        $start_time = microtime(true);
+        $CachedData = Redis::get('keys');
+        $end_time = microtime(true);
+
+        $execution_time = $end_time - $start_time;
+
+        if(empty($CachedData)){
+            $set_start_time = microtime(true);
+            $data = User::all();
+            Redis::set('keys',json_encode($data));
+            $set_end_time = microtime(true);
+            $set_execution_time = ($set_end_time - $set_start_time);
+
+            return "To set".$execution_time ;
+        }else{
+         return   "For getting".$execution_time ;
+        }
+
+
+
     }
 
 }
