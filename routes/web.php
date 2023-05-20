@@ -40,6 +40,9 @@ Route::middleware([CustomAuth::class])->group(function () {
     Route::get('/addrow',[AddRowController::class,'create']);
     Route::post('dynamic/addrow',[AddRowController::class,'addrow']);
 
+    //redis
+    Route::get('/redis',[HomeController::class,'getDataIntoRedis']);
+
 });
 
 // Dashboard
